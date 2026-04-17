@@ -22,9 +22,9 @@
   --gold-glow: rgba(212,168,67,0.06);
   --teal: #2dd4bf;
   --teal-dim: rgba(45,212,191,0.1);
-  --text: #eeecea;
-  --text-muted: #a8a6b8;
-  --text-dim: #4e4d5c;
+  --text: #f4f2ef;
+  --text-muted: #c8c6d8;
+  --text-dim: #8a8998;
   --radius: 16px;
   --radius-sm: 9px;
   --sidebar-w: 252px;
@@ -88,13 +88,13 @@ body {
 .sb-nav { padding: 14px 0; flex: 1; }
 .sb-section-label {
   font-size: 9px; font-weight: 600; letter-spacing: 0.13em;
-  text-transform: uppercase; color: var(--text-dim);
+  text-transform: uppercase; color: #7a7988;
   padding: 10px 18px 4px;
 }
 .sb-link {
   display: flex; align-items: center; gap: 9px;
   padding: 7px 18px;
-  font-size: 12.5px; color: var(--text-muted);
+  font-size: 12.5px; color: #d0cee0;
   text-decoration: none; cursor: pointer;
   transition: color 0.15s, background 0.15s;
   border-left: 2px solid transparent;
@@ -113,14 +113,15 @@ body {
   border-top: 1px solid var(--border);
 }
 .sb-tools-title {
-  font-size: 9px; font-weight: 600; letter-spacing: 0.13em;
-  text-transform: uppercase; color: var(--text-dim);
-  margin-bottom: 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--gold);
+  text-decoration: underline; text-underline-offset: 3px;
+  margin-bottom: 6px;
 }
 .sb-tool-link {
   display: flex; align-items: center; gap: 7px;
   padding: 5px 0;
-  font-size: 11.5px; color: var(--text-muted);
+  font-size: 12px; color: #d0cee0;
   text-decoration: none;
   transition: color 0.15s;
 }
@@ -311,23 +312,64 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 22px;
-  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  padding: 0;
+  transition: border-color 0.2s, background 0.2s;
   position: relative; overflow: hidden;
 }
 .card:hover {
   border-color: rgba(212,168,67,0.22);
-  transform: translateY(-2px);
   background: var(--surface2);
 }
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px 16px;
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+}
+.card-header-left { flex: 1; min-width: 0; }
+.card-chevron {
+  font-size: 11px; color: var(--text-dim);
+  flex-shrink: 0;
+  transition: transform 0.25s ease, color 0.15s;
+}
+.card.open .card-chevron,
+.workshop-card.open .card-chevron,
+.prompt-example-card.open .card-chevron,
+.tool-group-card.open .card-chevron { transform: rotate(180deg); color: var(--gold); }
+.card-body-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+.card.open .card-body-wrap,
+.workshop-card.open .card-body-wrap,
+.prompt-example-card.open .card-body-wrap,
+.tool-group-card.open .card-body-wrap {
+  grid-template-rows: 1fr;
+}
+.card-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.card-body-pad {
+  padding: 0 22px 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
 .card-icon {
-  font-size: 22px; margin-bottom: 12px; display: block;
+  font-size: 18px; margin-bottom: 8px; display: block;
 }
 .card-title {
   font-family: var(--font);
   font-size: 14px; font-weight: 600;
-  color: var(--text); margin-bottom: 7px;
+  color: var(--text); margin-bottom: 0;
   line-height: 1.3;
+}
+.card-title-sm {
+  font-family: var(--font);
+  font-size: 13px; font-weight: 600;
+  color: var(--text); line-height: 1.3;
 }
 .card-body {
   font-size: 13px; color: var(--text-muted);
@@ -384,14 +426,16 @@ body {
   background: var(--surface);
   border: 1px solid var(--border-gold);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: 0;
   margin-top: 16px;
+  overflow: hidden;
 }
+.prompt-example-card.open .card-chevron { }
 .prompt-example-title {
   font-family: var(--font);
   font-size: 12px; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 14px;
+  color: var(--gold); margin-bottom: 0;
 }
 .prompt-parts {
   display: flex; flex-direction: column; gap: 8px;
@@ -421,16 +465,18 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
-  display: flex; flex-direction: column; gap: 14px;
-  transition: border-color 0.2s, transform 0.2s;
+  padding: 0;
+  transition: border-color 0.2s;
+  overflow: hidden;
 }
 .workshop-card:hover {
   border-color: var(--border-gold);
-  transform: translateY(-2px);
 }
+.workshop-card.open .card-chevron { }
 .workshop-header {
   display: flex; align-items: flex-start; gap: 12px;
+  padding: 18px 22px 16px;
+  cursor: pointer; user-select: none;
 }
 .workshop-num {
   font-family: var(--font-mono);
@@ -576,14 +622,14 @@ body {
   color: var(--gold); margin-bottom: 7px;
 }
 .disclaimer-text {
-  font-size: 11.5px; color: var(--text-muted); line-height: 1.65;
+  font-size: 11.5px; color: #c0bece; line-height: 1.65;
 }
 .footer-bottom {
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 12px;
 }
 .footer-credit {
-  font-size: 12px; color: var(--text-dim);
+  font-size: 12px; color: #9896a8;
 }
 .footer-credit a { color: var(--gold); text-decoration: none; }
 .footer-credit a:hover { color: var(--gold-light); }
@@ -746,37 +792,83 @@ body {
 /* ── CME CODE BANNER ── */
 .cme-banner {
   margin-top: 24px;
-}
-.cme-banner-inner {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 6px;
   background: var(--surface);
   border: 1.5px solid rgba(212,168,67,0.35);
   border-radius: var(--radius);
-  padding: 20px 28px;
-  text-align: center;
-  position: relative; overflow: hidden;
+  overflow: hidden;
+  position: relative;
 }
-.cme-banner-inner::before {
+.cme-banner::before {
   content: '';
   position: absolute; inset: 0;
   background: radial-gradient(ellipse at center, rgba(212,168,67,0.06) 0%, transparent 70%);
   pointer-events: none;
 }
+.cme-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px;
+  cursor: pointer; user-select: none;
+}
+.cme-banner-inner {
+  position: relative;
+}
 .cme-label {
   font-family: var(--font);
-  font-size: 10px; font-weight: 600;
+  font-size: 11px; font-weight: 600;
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--gold);
 }
+.cme-chevron {
+  font-size: 11px; color: var(--text-dim);
+  transition: transform 0.25s ease, color 0.15s;
+}
+.cme-banner.open .cme-chevron { transform: rotate(180deg); color: var(--gold); }
+.cme-body-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+.cme-banner.open .cme-body-wrap { grid-template-rows: 1fr; }
+.cme-body-inner {
+  overflow: hidden;
+  min-height: 0;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; text-align: center;
+}
+.cme-body-inner > * { padding-bottom: 0; }
+.cme-banner.open .cme-body-inner { padding: 4px 24px 22px; }
 .cme-code {
   font-family: var(--font-mono);
-  font-size: 42px; font-weight: 500;
-  color: var(--text); letter-spacing: 0.12em;
+  font-size: 52px; font-weight: 500;
+  color: var(--text); letter-spacing: 0.14em;
   line-height: 1;
 }
 .cme-sub {
   font-size: 12px; color: var(--text-muted);
+}
+
+/* ── TOOL GROUP CARD ── */
+.tool-group-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.tool-group-card:hover { border-color: rgba(212,168,67,0.22); }
+.tool-group-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  cursor: pointer; user-select: none;
+  gap: 10px;
+}
+.tool-group-label {
+  font-family: var(--font);
+  font-size: 13px; font-weight: 600;
+  color: var(--text); letter-spacing: 0.01em;
+}
+.tool-group-body {
+  padding: 4px 16px 16px;
 }
 
 /* ── SCROLL REVEAL ── */
@@ -965,84 +1057,115 @@ body {
     <div class="card-grid reveal">
 
       <div class="card">
-        <div class="card-tag">Context</div>
-        <div class="card-title">The Gartner Hype Cycle</div>
-        <div class="card-body">
-          <svg viewBox="0 0 320 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-top:8px;display:block;">
-            <!-- axes -->
-            <line x1="32" y1="8" x2="32" y2="148" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-            <line x1="32" y1="148" x2="312" y2="148" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-            <!-- hype curve -->
-            <path d="M32,146 C54,146 66,128 82,58 C90,24 98,12 106,12 C114,12 120,24 128,70 C136,114 144,134 162,136 C180,138 192,122 214,112 C236,102 254,94 312,82"
-              fill="none" stroke="#d4a843" stroke-width="2" stroke-linecap="round"/>
-            <!-- Peak label at apex — bg then text -->
-            <rect x="76" y="1" width="60" height="17" rx="2" fill="#1a1a28"/>
-            <text x="106" y="9" fill="rgba(212,168,67,0.95)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle" font-weight="600">Peak of Inflated</text>
-            <text x="106" y="17" fill="rgba(212,168,67,0.95)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle" font-weight="600">Expectations</text>
-            <!-- X-axis phase labels — bg rects then text -->
-            <rect x="4" y="152" width="56" height="17" rx="2" fill="#1a1a28"/>
-            <text x="32" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Innovation</text>
-            <text x="32" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Trigger</text>
-
-            <rect x="134" y="152" width="56" height="17" rx="2" fill="#1a1a28"/>
-            <text x="162" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Trough of</text>
-            <text x="162" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Disillusionment</text>
-
-            <rect x="186" y="152" width="60" height="17" rx="2" fill="#1a1a28"/>
-            <text x="216" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Slope of</text>
-            <text x="216" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Enlightenment</text>
-
-            <rect x="268" y="152" width="48" height="17" rx="2" fill="#1a1a28"/>
-            <text x="292" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Plateau of</text>
-            <text x="292" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Productivity</text>
-          </svg>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Context</div>
+            <div class="card-title">The Gartner Hype Cycle</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <svg viewBox="0 0 320 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-top:4px;display:block;">
+                <line x1="32" y1="8" x2="32" y2="148" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <line x1="32" y1="148" x2="312" y2="148" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                <path d="M32,146 C54,146 66,128 82,58 C90,24 98,12 106,12 C114,12 120,24 128,70 C136,114 144,134 162,136 C180,138 192,122 214,112 C236,102 254,94 312,82" fill="none" stroke="#d4a843" stroke-width="2" stroke-linecap="round"/>
+                <rect x="76" y="1" width="60" height="17" rx="2" fill="#1a1a28"/>
+                <text x="106" y="9" fill="rgba(212,168,67,0.95)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle" font-weight="600">Peak of Inflated</text>
+                <text x="106" y="17" fill="rgba(212,168,67,0.95)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle" font-weight="600">Expectations</text>
+                <rect x="4" y="152" width="56" height="17" rx="2" fill="#1a1a28"/>
+                <text x="32" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Innovation</text>
+                <text x="32" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Trigger</text>
+                <rect x="134" y="152" width="56" height="17" rx="2" fill="#1a1a28"/>
+                <text x="162" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Trough of</text>
+                <text x="162" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Disillusionment</text>
+                <rect x="186" y="152" width="60" height="17" rx="2" fill="#1a1a28"/>
+                <text x="216" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Slope of</text>
+                <text x="216" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Enlightenment</text>
+                <rect x="268" y="152" width="48" height="17" rx="2" fill="#1a1a28"/>
+                <text x="292" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Plateau of</text>
+                <text x="292" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Productivity</text>
+              </svg>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <div class="card">
-        <span class="card-icon">🔬</span>
-        <div class="card-tag">Applications</div>
-        <div class="card-title">Four Domains of AI Use in Nuclear Medicine</div>
-        <div class="card-body">
-          <ul>
-            <li><strong>Clinical</strong> — SPECT/PET reconstruction, lesion detection, dosimetry support, report drafting</li>
-            <li><strong>Educational</strong> — Board prep for physicians &amp; physicists, technologist training, patient handouts, quiz creation</li>
-            <li><strong>Research</strong> — Literature synthesis, protocol design, physics modeling, grant writing</li>
-            <li><strong>Administrative</strong> — Prior auth letters, QC documentation, scheduling optimization, policy drafts</li>
-          </ul>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Applications</div>
+            <div class="card-title">Four Domains of AI Use in Nuclear Medicine</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <ul>
+                <li><strong>Clinical</strong> — SPECT/PET reconstruction, lesion detection, dosimetry support, report drafting</li>
+                <li><strong>Educational</strong> — Board prep for physicians &amp; physicists, technologist training, patient handouts, quiz creation</li>
+                <li><strong>Research</strong> — Literature synthesis, protocol design, physics modeling, grant writing</li>
+                <li><strong>Administrative</strong> — Prior auth letters, QC documentation, scheduling optimization, policy drafts</li>
+              </ul>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <div class="card">
-        <span class="card-icon">⚠️</span>
-        <div class="card-tag gold">Ethics</div>
-        <div class="card-title">The Challenge of Accuracy</div>
-        <div class="card-body">
-          <p>AI models <em>hallucinate</em> — they generate confident, plausible, but factually incorrect content. In nuclear medicine, this has real stakes.</p>
-          <div class="divider"></div>
-          <ul>
-            <li>Always verify AI output against primary sources</li>
-            <li>Bias in training data can skew clinical recommendations</li>
-            <li>AI-generated reports require radiologist sign-off</li>
-            <li>Patient data must never be entered into public LLMs</li>
-          </ul>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag gold" style="margin-bottom:6px;">Ethics</div>
+            <div class="card-title">The Challenge of Accuracy</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <p>AI models <em>hallucinate</em> — they generate confident, plausible, but factually incorrect content. In nuclear medicine, this has real stakes.</p>
+              <div class="divider"></div>
+              <ul>
+                <li>Always verify AI output against primary sources</li>
+                <li>Bias in training data can skew clinical recommendations</li>
+                <li>AI-generated reports require radiologist sign-off</li>
+                <li>Patient data must never be entered into public LLMs</li>
+              </ul>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <div class="card" style="border-style:dashed; background:transparent; grid-column: 1 / -1;">
-        <div class="card-tag gold">Note</div>
-        <div class="card-title" style="font-size:13px;">Important Caution — All AI Tools</div>
-        <div class="card-body" style="font-size:12px; color:#b8b6c8;">No patient data — including images, reports, identifiers, or any protected health information — should be uploaded to or entered into any AI tool without explicit permission and in accordance with your institutional policies, BAA agreements, and applicable HIPAA regulations. This applies to all AI platforms, not only image and video tools.</div>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag gold" style="margin-bottom:6px;">Note</div>
+            <div class="card-title" style="font-size:13px;">Important Caution — All AI Tools</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body" style="font-size:12px; color:#d0cee0;">No patient data — including images, reports, identifiers, or any protected health information — should be uploaded to or entered into any AI tool without explicit permission and in accordance with your institutional policies, BAA agreements, and applicable HIPAA regulations. This applies to all AI platforms, not only image and video tools.</div>
+          </div></div>
+        </div>
       </div>
 
     </div>
 
     <!-- Pre-CME Code -->
     <div class="cme-banner reveal">
-      <div class="cme-banner-inner">
+      <div class="cme-banner-inner cme-header" onclick="toggleCME(this)">
         <div class="cme-label">Pre-Session CME Code</div>
-        <div class="cme-code">6109</div>
-        <div class="cme-sub">Enter this code now to claim your pre-session CME credit</div>
+        <span class="cme-chevron">▼</span>
+      </div>
+      <div class="cme-body-wrap">
+        <div class="cme-body-inner">
+          <div class="cme-code">6109</div>
+          <div class="cme-sub">Enter this code now to claim your pre-session CME credit</div>
+        </div>
       </div>
     </div>
 
@@ -1059,74 +1182,101 @@ body {
 
     <div class="card-grid reveal">
       <div class="card">
-        <div class="card-tag">Definition</div>
-        <div class="card-title">Everyday Analogies</div>
-        <div class="card-body">
-          <p>You already know how to prompt — you just don't call it that:</p>
-          <ul style="margin-top:8px;">
-            <li>A well-formed PubMed query</li>
-            <li>A PICOT research question</li>
-            <li>A structured patient history to a consultant</li>
-            <li>Precise search terms in a PACS system</li>
-          </ul>
-          <p style="margin-top:10px;">Prompt engineering applies the same precision to generative AI.</p>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Definition</div>
+            <div class="card-title">Everyday Analogies</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <p>You already know how to prompt — you just don't call it that:</p>
+              <ul style="margin-top:8px;">
+                <li>A well-formed PubMed query</li>
+                <li>A PICOT research question</li>
+                <li>A structured patient history to a consultant</li>
+                <li>Precise search terms in a PACS system</li>
+              </ul>
+              <p style="margin-top:10px;">Prompt engineering applies the same precision to generative AI.</p>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <div class="card" style="grid-column: span 2;">
-        <div class="card-tag">Framework</div>
-        <div class="card-title">The 6 Elements of an Effective Prompt</div>
-        <div class="anatomy-grid">
-          <div class="anatomy-item">
-            <div class="anatomy-item-key">Role</div>
-            <div class="anatomy-item-val">Who should the AI act as? (e.g., "You are a board-certified nuclear medicine physician...")</div>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Framework</div>
+            <div class="card-title">The 6 Elements of an Effective Prompt</div>
           </div>
-          <div class="anatomy-item">
-            <div class="anatomy-item-key">Task</div>
-            <div class="anatomy-item-val">What specific action should it perform? Clear verbs matter. (create, summarize, compare, draft)</div>
-          </div>
-          <div class="anatomy-item">
-            <div class="anatomy-item-key">Context</div>
-            <div class="anatomy-item-val">What background does the AI need? (patient scenario, audience, setting)</div>
-          </div>
-          <div class="anatomy-item">
-            <div class="anatomy-item-key">Example</div>
-            <div class="anatomy-item-val">Optional but powerful — provide a sample of what you want.</div>
-          </div>
-          <div class="anatomy-item">
-            <div class="anatomy-item-key">Format</div>
-            <div class="anatomy-item-val">How should the output be structured? (bullet list, table, paragraph, SOAP note)</div>
-          </div>
-          <div class="anatomy-item">
-            <div class="anatomy-item-key">Tone</div>
-            <div class="anatomy-item-val">What register? (formal/technical for colleagues, plain language for patients)</div>
-          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="anatomy-grid">
+              <div class="anatomy-item">
+                <div class="anatomy-item-key">Role</div>
+                <div class="anatomy-item-val">Who should the AI act as? (e.g., "You are a board-certified nuclear medicine physician...")</div>
+              </div>
+              <div class="anatomy-item">
+                <div class="anatomy-item-key">Task</div>
+                <div class="anatomy-item-val">What specific action should it perform? Clear verbs matter. (create, summarize, compare, draft)</div>
+              </div>
+              <div class="anatomy-item">
+                <div class="anatomy-item-key">Context</div>
+                <div class="anatomy-item-val">What background does the AI need? (patient scenario, audience, setting)</div>
+              </div>
+              <div class="anatomy-item">
+                <div class="anatomy-item-key">Example</div>
+                <div class="anatomy-item-val">Optional but powerful — provide a sample of what you want.</div>
+              </div>
+              <div class="anatomy-item">
+                <div class="anatomy-item-key">Format</div>
+                <div class="anatomy-item-val">How should the output be structured? (bullet list, table, paragraph, SOAP note)</div>
+              </div>
+              <div class="anatomy-item">
+                <div class="anatomy-item-key">Tone</div>
+                <div class="anatomy-item-val">What register? (formal/technical for colleagues, plain language for patients)</div>
+              </div>
+            </div>
+          </div></div>
         </div>
       </div>
     </div>
 
     <div class="prompt-example-card reveal">
-      <div class="prompt-example-title">Worked Example — Nuclear Medicine Context</div>
-      <div class="prompt-parts">
-        <div class="prompt-part">
-          <div class="prompt-part-key">Role</div>
-          <div class="prompt-part-val">You are an experienced nuclear medicine physician and educator.</div>
-        </div>
-        <div class="prompt-part">
-          <div class="prompt-part-key">Task</div>
-          <div class="prompt-part-val">Create a concise patient education handout about a whole-body bone scan.</div>
-        </div>
-        <div class="prompt-part">
-          <div class="prompt-part-key">Context</div>
-          <div class="prompt-part-val">The patient is a 62-year-old with a new diagnosis of prostate cancer. They are anxious and have no prior imaging experience.</div>
-        </div>
-        <div class="prompt-part">
-          <div class="prompt-part-key">Format</div>
-          <div class="prompt-part-val">Use plain language. Include: what to expect, radiation safety reassurance, preparation instructions, and what happens after.</div>
-        </div>
-        <div class="prompt-part">
-          <div class="prompt-part-key">Tone</div>
-          <div class="prompt-part-val">Calm, reassuring, and clear. Avoid jargon. Use a 6th-grade reading level.</div>
+      <div class="prompt-example-header" onclick="toggleGeneric(this)" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding-bottom:0;">
+        <div class="prompt-example-title" style="margin-bottom:0;">Worked Example — Nuclear Medicine Context</div>
+        <span class="card-chevron" style="font-size:11px;color:var(--text-dim);transition:transform 0.25s ease,color 0.15s;flex-shrink:0;margin-left:12px;">▼</span>
+      </div>
+      <div class="card-body-wrap" style="margin-top:0;">
+        <div class="card-body-inner">
+          <div style="padding-top:14px;">
+            <div class="prompt-parts">
+              <div class="prompt-part">
+                <div class="prompt-part-key">Role</div>
+                <div class="prompt-part-val">You are an experienced nuclear medicine physician and educator.</div>
+              </div>
+              <div class="prompt-part">
+                <div class="prompt-part-key">Task</div>
+                <div class="prompt-part-val">Create a concise patient education handout about a whole-body bone scan.</div>
+              </div>
+              <div class="prompt-part">
+                <div class="prompt-part-key">Context</div>
+                <div class="prompt-part-val">The patient is a 62-year-old with a new diagnosis of prostate cancer. They are anxious and have no prior imaging experience.</div>
+              </div>
+              <div class="prompt-part">
+                <div class="prompt-part-key">Format</div>
+                <div class="prompt-part-val">Use plain language. Include: what to expect, radiation safety reassurance, preparation instructions, and what happens after.</div>
+              </div>
+              <div class="prompt-part">
+                <div class="prompt-part-key">Tone</div>
+                <div class="prompt-part-val">Calm, reassuring, and clear. Avoid jargon. Use a 6th-grade reading level.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1144,81 +1294,112 @@ body {
     <div class="card-grid reveal">
 
       <div class="card">
-        <span class="card-icon">✍️</span>
-        <div class="card-tag">Technique 1</div>
-        <div class="card-title">Free Text Prompting</div>
-        <div class="card-body">
-          <p>The foundation — available in every AI platform. Apply the 6-element anatomy and iterate.</p>
-          <ul style="margin-top:10px;">
-            <li>Refine your prompt based on each output</li>
-            <li>Start a new chat if context becomes polluted</li>
-            <li>Rate responses and give explicit feedback</li>
-            <li>Use "forget history" where supported</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card">
-        <span class="card-icon">🎭</span>
-        <div class="card-tag">Technique 2</div>
-        <div class="card-title">Role-Playing Prompts</div>
-        <div class="card-body">
-          <p>Assign the AI a specific expert persona to improve accuracy and calibrate tone for your audience.</p>
-          <div style="background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; margin-top:10px; font-size:12.5px; color:var(--text-muted); font-style:italic;">
-            "You are a nuclear medicine physicist reviewing a center's SPECT/CT quality control protocol. Identify gaps relative to SNMMI guidelines..."
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Technique 1</div>
+            <div class="card-title">Free Text Prompting</div>
           </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <p>The foundation — available in every AI platform. Apply the 6-element anatomy and iterate.</p>
+              <ul style="margin-top:10px;">
+                <li>Refine your prompt based on each output</li>
+                <li>Start a new chat if context becomes polluted</li>
+                <li>Rate responses and give explicit feedback</li>
+                <li>Use "forget history" where supported</li>
+              </ul>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <div class="card">
-        <span class="card-icon">🔗</span>
-        <div class="card-tag">Technique 3</div>
-        <div class="card-title">Chain-of-Thought Prompting</div>
-        <div class="card-body">
-          <p>Force the AI to reason step-by-step before reaching a conclusion. Critical for complex clinical and physics scenarios.</p>
-          <ul style="margin-top:10px;">
-            <li>Ask AI to "explain your reasoning step-by-step"</li>
-            <li>Define each reasoning step explicitly</li>
-            <li>Best for differential diagnosis and dosimetry checks</li>
-          </ul>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Technique 2</div>
+            <div class="card-title">Role-Playing Prompts</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <p>Assign the AI a specific expert persona to improve accuracy and calibrate tone for your audience.</p>
+              <div style="background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; margin-top:10px; font-size:12.5px; color:var(--text-muted); font-style:italic;">
+                "You are a nuclear medicine physicist reviewing a center's SPECT/CT quality control protocol. Identify gaps relative to SNMMI guidelines..."
+              </div>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <div class="card">
-        <span class="card-icon">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-            <rect x="3" y="6" width="14" height="11" rx="1.5" fill="rgba(212,168,67,0.18)" stroke="#d4a843" stroke-width="1.2"/>
-            <rect x="5" y="4" width="14" height="11" rx="1.5" fill="rgba(212,168,67,0.12)" stroke="#d4a843" stroke-width="1.2"/>
-            <rect x="7" y="2" width="14" height="11" rx="1.5" fill="rgba(212,168,67,0.22)" stroke="#d4a843" stroke-width="1.2"/>
-            <line x1="10" y1="6" x2="18" y2="6" stroke="#d4a843" stroke-width="0.8" stroke-linecap="round" opacity="0.6"/>
-            <line x1="10" y1="8.5" x2="18" y2="8.5" stroke="#d4a843" stroke-width="0.8" stroke-linecap="round" opacity="0.6"/>
-            <line x1="10" y1="11" x2="15" y2="11" stroke="#d4a843" stroke-width="0.8" stroke-linecap="round" opacity="0.6"/>
-          </svg>
-        </span>
-        <div class="card-tag">Technique 4</div>
-        <div class="card-title">Retrieval-Augmented Generation (RAG)</div>
-        <div class="card-body">
-          <p>Ground AI output in <em>your</em> documents — not just its training data. Upload a source and prompt against it.</p>
-          <ul style="margin-top:10px;">
-            <li>Upload SNMMI guidelines, review articles, or protocols</li>
-            <li>Generate study guides, summaries, or Q&amp;A grounded in the source</li>
-            <li>Every claim is traceable back to your uploaded document</li>
-          </ul>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Technique 3</div>
+            <div class="card-title">Chain-of-Thought Prompting</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <p>Force the AI to reason step-by-step before reaching a conclusion. Critical for complex clinical and physics scenarios.</p>
+              <ul style="margin-top:10px;">
+                <li>Ask AI to "explain your reasoning step-by-step"</li>
+                <li>Define each reasoning step explicitly</li>
+                <li>Best for differential diagnosis and dosimetry checks</li>
+              </ul>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <div class="card">
-        <span class="card-icon">🛠️</span>
-        <div class="card-tag">Technique 5</div>
-        <div class="card-title">Custom AI Tools (GPTs &amp; Gems)</div>
-        <div class="card-body">
-          <p>Build or use pre-configured AI assistants trained on specific instructions — no prompting from scratch each time.</p>
-          <ul style="margin-top:10px;">
-            <li>Custom GPTs (ChatGPT) and Gems (Gemini) save reusable system prompts</li>
-            <li>Build a "Board Review Q&amp;A Bot" or "Report Drafting Assistant"</li>
-            <li>Share within your department for consistent outputs</li>
-            <li>No coding required — configure via natural language</li>
-          </ul>
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Technique 4</div>
+            <div class="card-title">Retrieval-Augmented Generation (RAG)</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <p>Ground AI output in <em>your</em> documents — not just its training data. Upload a source and prompt against it.</p>
+              <ul style="margin-top:10px;">
+                <li>Upload SNMMI guidelines, review articles, or protocols</li>
+                <li>Generate study guides, summaries, or Q&amp;A grounded in the source</li>
+                <li>Every claim is traceable back to your uploaded document</li>
+              </ul>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-tag" style="margin-bottom:6px;">Technique 5</div>
+            <div class="card-title">Custom AI Tools (GPTs &amp; Gems)</div>
+          </div>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="card-body-pad">
+            <div class="card-body">
+              <p>Build or use pre-configured AI assistants trained on specific instructions — no prompting from scratch each time.</p>
+              <ul style="margin-top:10px;">
+                <li>Custom GPTs (ChatGPT) and Gems (Gemini) save reusable system prompts</li>
+                <li>Build a "Board Review Q&amp;A Bot" or "Report Drafting Assistant"</li>
+                <li>Share within your department for consistent outputs</li>
+                <li>No coding required — configure via natural language</li>
+              </ul>
+            </div>
+          </div></div>
         </div>
       </div>
 
@@ -1241,113 +1422,124 @@ body {
 
       <!-- Exercise 1 -->
       <div class="workshop-card reveal">
-        <div class="workshop-header">
+        <div class="workshop-header" onclick="toggleGeneric(this)" style="cursor:pointer;user-select:none;">
           <span class="workshop-num">Ex 01</span>
-          <div>
+          <div style="flex:1;">
             <div class="workshop-title">Patient Education Resource — Pediatric <sup>99m</sup>Tc MAG3 Renal Scan</div>
           </div>
+          <span class="card-chevron" style="font-size:11px;color:var(--text-dim);transition:transform 0.25s ease,color 0.15s;flex-shrink:0;margin-left:10px;">▼</span>
         </div>
-        <div class="workshop-desc">
-          Practice <strong>role-playing + free text prompting</strong> to create a parent-friendly handout for a child undergoing a Tc-99m MAG3 renal scan with furosemide. Focus on what the scan measures, the Lasix injection, radiation safety reassurance, and what to expect on the day.
-        </div>
-        <div class="workshop-meta">
-          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Prompt Type:</span> Role-Playing + Free Text</span>
-          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Domain:</span> Educational</span>
-        </div>
-        <div class="workshop-footer">
-          <button class="btn-copy" onclick="copyPrompt(this, 'ex1')">
-            <span>⎘</span> Copy Prompt
-          </button>
-          <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
-          <a class="btn-ai" href="https://claude.ai" target="_blank" rel="noopener">🟠 Claude</a>
-          <a class="btn-ai" href="https://gemini.google.com" target="_blank" rel="noopener">🔵 Gemini</a>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div style="padding:0 0 6px;">
+            <div class="workshop-desc">
+              Practice <strong>role-playing + free text prompting</strong> to create a parent-friendly handout for a child undergoing a Tc-99m MAG3 renal scan with furosemide. Focus on what the scan measures, the Lasix injection, radiation safety reassurance, and what to expect on the day.
+            </div>
+            <div class="workshop-meta">
+              <span class="wm-pill"><span class="dot"></span> <span style="color:var(--gold);margin-right:3px;font-weight:600;">Prompt Type:</span> Role-Playing + Free Text</span>
+              <span class="wm-pill"><span class="dot"></span> <span style="color:var(--gold);margin-right:3px;font-weight:600;">Domain:</span> Educational</span>
+            </div>
+            <div class="workshop-footer">
+              <button class="btn-copy" onclick="copyPrompt(this, 'ex1')"><span>⎘</span> Copy Prompt</button>
+              <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
+              <a class="btn-ai" href="https://claude.ai" target="_blank" rel="noopener">🟠 Claude</a>
+              <a class="btn-ai" href="https://gemini.google.com" target="_blank" rel="noopener">🔵 Gemini</a>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <!-- Exercise 2 -->
       <div class="workshop-card reveal">
-        <div class="workshop-header">
+        <div class="workshop-header" onclick="toggleGeneric(this)" style="cursor:pointer;user-select:none;">
           <span class="workshop-num">Ex 02</span>
-          <div>
+          <div style="flex:1;">
             <div class="workshop-title">Chain-of-Thought: PET/CT Differential Diagnosis</div>
           </div>
+          <span class="card-chevron" style="font-size:11px;color:var(--text-dim);transition:transform 0.25s ease,color 0.15s;flex-shrink:0;margin-left:10px;">▼</span>
         </div>
-        <div class="workshop-desc">
-          A 58-year-old male with unexplained weight loss and night sweats. FDG PET/CT shows multiple hypermetabolic mediastinal and hilar nodes (SUVmax 14.2), with no distant organ involvement. Practice <strong>chain-of-thought prompting</strong> to force the AI to reason systematically to a diagnosis — without jumping to conclusions.
-        </div>
-        <div class="workshop-meta">
-          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Prompt Type:</span> Chain-of-Thought</span>
-          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Domain:</span> Clinical</span>
-        </div>
-        <div class="workshop-footer">
-          <button class="btn-copy" onclick="copyPrompt(this, 'ex2')">
-            <span>⎘</span> Copy Prompt
-          </button>
-          <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
-          <a class="btn-ai" href="https://claude.ai" target="_blank" rel="noopener">🟠 Claude</a>
-          <a class="btn-ai" href="https://gemini.google.com" target="_blank" rel="noopener">🔵 Gemini</a>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div style="padding:0 0 6px;">
+            <div class="workshop-desc">
+              A 58-year-old male with unexplained weight loss and night sweats. FDG PET/CT shows multiple hypermetabolic mediastinal and hilar nodes (SUVmax 14.2), with no distant organ involvement. Practice <strong>chain-of-thought prompting</strong> to force the AI to reason systematically to a diagnosis — without jumping to conclusions.
+            </div>
+            <div class="workshop-meta">
+              <span class="wm-pill"><span class="dot"></span> <span style="color:var(--gold);margin-right:3px;font-weight:600;">Prompt Type:</span> Chain-of-Thought</span>
+              <span class="wm-pill"><span class="dot"></span> <span style="color:var(--gold);margin-right:3px;font-weight:600;">Domain:</span> Clinical</span>
+            </div>
+            <div class="workshop-footer">
+              <button class="btn-copy" onclick="copyPrompt(this, 'ex2')"><span>⎘</span> Copy Prompt</button>
+              <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
+              <a class="btn-ai" href="https://claude.ai" target="_blank" rel="noopener">🟠 Claude</a>
+              <a class="btn-ai" href="https://gemini.google.com" target="_blank" rel="noopener">🔵 Gemini</a>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <!-- Exercise 3 -->
       <div class="workshop-card reveal">
-        <div class="workshop-header">
+        <div class="workshop-header" onclick="toggleGeneric(this)" style="cursor:pointer;user-select:none;">
           <span class="workshop-num">Ex 03</span>
-          <div>
+          <div style="flex:1;">
             <div class="workshop-title">RAG: Build a Board Review Study Guide</div>
           </div>
+          <span class="card-chevron" style="font-size:11px;color:var(--text-dim);transition:transform 0.25s ease,color 0.15s;flex-shrink:0;margin-left:10px;">▼</span>
         </div>
-        <div class="workshop-desc">
-          Use <strong>Retrieval-Augmented Generation (RAG)</strong> with NotebookLM. Upload a nuclear medicine review article or SNMMI guideline PDF, then use the prompt below to generate a structured study guide grounded in that source — not from the AI's general training.
-        </div>
-        <div class="workshop-meta">
-          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Prompt Type:</span> RAG</span>
-          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Domain:</span> Educational</span>
-        </div>
-        <div class="workshop-footer">
-          <button class="btn-copy" onclick="copyPrompt(this, 'ex3')">
-            <span>⎘</span> Copy Prompt
-          </button>
-          <a class="btn-ai" href="https://notebooklm.google.com" target="_blank" rel="noopener">📓 NotebookLM</a>
-          <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div style="padding:0 0 6px;">
+            <div class="workshop-desc">
+              Use <strong>Retrieval-Augmented Generation (RAG)</strong> with NotebookLM. Upload a nuclear medicine review article or SNMMI guideline PDF, then use the prompt below to generate a structured study guide grounded in that source — not from the AI's general training.
+            </div>
+            <div class="workshop-meta">
+              <span class="wm-pill"><span class="dot"></span> <span style="color:var(--gold);margin-right:3px;font-weight:600;">Prompt Type:</span> RAG</span>
+              <span class="wm-pill"><span class="dot"></span> <span style="color:var(--gold);margin-right:3px;font-weight:600;">Domain:</span> Educational</span>
+            </div>
+            <div class="workshop-footer">
+              <button class="btn-copy" onclick="copyPrompt(this, 'ex3')"><span>⎘</span> Copy Prompt</button>
+              <a class="btn-ai" href="https://notebooklm.google.com" target="_blank" rel="noopener">📓 NotebookLM</a>
+              <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
+            </div>
+          </div></div>
         </div>
       </div>
 
       <!-- Exercise 4 -->
       <div class="workshop-card reveal">
-        <div class="workshop-header">
+        <div class="workshop-header" onclick="toggleGeneric(this)" style="cursor:pointer;user-select:none;">
           <span class="workshop-num">Ex 04</span>
-          <div>
+          <div style="flex:1;">
             <div class="workshop-title">Custom AI Tool: Letter of Recommendation Writer</div>
           </div>
+          <span class="card-chevron" style="font-size:11px;color:var(--text-dim);transition:transform 0.25s ease,color 0.15s;flex-shrink:0;margin-left:10px;">▼</span>
         </div>
-        <div class="workshop-desc">
-          Build a <strong>custom GPT or Gem</strong> that drafts tailored letters of recommendation for nuclear medicine trainees and staff. The tool accepts a position description, the applicant's role, and a synthetic CV — then generates a polished, specific letter. Use the prompt below as the system instruction when configuring your custom tool.
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div style="padding:0 0 6px;">
+            <div class="workshop-desc">
+              Build a <strong>custom GPT or Gem</strong> that drafts tailored letters of recommendation for nuclear medicine trainees and staff. The tool accepts a position description, the applicant's role, and a synthetic CV — then generates a polished, specific letter. Use the prompt below as the system instruction when configuring your custom tool.
+            </div>
+            <div class="workshop-meta">
+              <span class="wm-pill"><span class="dot"></span> <span style="color:var(--gold);margin-right:3px;font-weight:600;">Prompt Type:</span> Custom AI Tool</span>
+              <span class="wm-pill"><span class="dot"></span> <span style="color:var(--gold);margin-right:3px;font-weight:600;">Domain:</span> Administrative</span>
+            </div>
+            <div style="background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 16px; font-size:12.5px; color:var(--text-muted); line-height:1.65; margin-bottom:2px;">
+              <div style="font-family:var(--font); font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">How to set it up</div>
+              <ol style="list-style:decimal; padding-left:16px; display:flex; flex-direction:column; gap:5px;">
+                <li>Open ChatGPT → <em>Explore GPTs</em> → <em>Create</em>, or Gemini → <em>Gems</em> → <em>New Gem</em></li>
+                <li>Paste the system prompt below into the instructions field</li>
+                <li>Save and name it <em>"NM Recommendation Writer"</em></li>
+                <li>When using: paste in (1) the position title &amp; description, (2) the applicant's role/training level, and (3) a CV or resume — use the sample CV below to try it now</li>
+                <li>The tool outputs a full draft letter — review, edit, and sign</li>
+              </ol>
+            </div>
+            <div class="workshop-footer">
+              <button class="btn-copy" onclick="copyPrompt(this, 'ex4')"><span>⎘</span> Copy System Prompt</button>
+              <button class="btn-copy" onclick="copyPrompt(this, 'ex4cv')" style="background:var(--teal-dim);color:var(--teal);border-color:rgba(45,212,191,0.25);"><span>⎘</span> Copy Sample CV</button>
+              <a class="btn-ai" href="https://chatgpt.com/gpts/editor" target="_blank" rel="noopener">🟢 Build in ChatGPT</a>
+              <a class="btn-ai" href="https://gemini.google.com/gems/create" target="_blank" rel="noopener">🔵 Build in Gemini</a>
+            </div>
+          </div></div>
         </div>
-        <div class="workshop-meta">
-          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Prompt Type:</span> Custom AI Tool</span>
-          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Domain:</span> Administrative</span>
-        </div>
-        <div style="background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 16px; font-size:12.5px; color:var(--text-muted); line-height:1.65; margin-bottom:2px;">
-          <div style="font-family:var(--font); font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">How to set it up</div>
-          <ol style="list-style:decimal; padding-left:16px; display:flex; flex-direction:column; gap:5px;">
-            <li>Open ChatGPT → <em>Explore GPTs</em> → <em>Create</em>, or Gemini → <em>Gems</em> → <em>New Gem</em></li>
-            <li>Paste the system prompt below into the instructions field</li>
-            <li>Save and name it <em>"NM Recommendation Writer"</em></li>
-            <li>When using: paste in (1) the position title &amp; description, (2) the applicant's role/training level, and (3) a CV or resume — use the sample CV below to try it now</li>
-            <li>The tool outputs a full draft letter — review, edit, and sign</li>
-          </ol>
-        </div>
-        <div class="workshop-footer">
-          <button class="btn-copy" onclick="copyPrompt(this, 'ex4')">
-            <span>⎘</span> Copy System Prompt
-          </button>
-          <button class="btn-copy" onclick="copyPrompt(this, 'ex4cv')" style="background:var(--teal-dim); color:var(--teal); border-color:rgba(45,212,191,0.25);">
-            <span>⎘</span> Copy Sample CV
-          </button>
-          <a class="btn-ai" href="https://chatgpt.com/gpts/editor" target="_blank" rel="noopener">🟢 Build in ChatGPT</a>
-          <a class="btn-ai" href="https://gemini.google.com/gems/create" target="_blank" rel="noopener">🔵 Build in Gemini</a>
-        </div>
+      </div>
       </div>
 
     </div>
@@ -1362,91 +1554,129 @@ body {
     <p class="section-desc reveal">The tools available today span language models, evidence-based research, artifact generation, and image/video synthesis. A curated starting point for nuclear medicine practice.</p>
 
 
-    <h3 style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;" class="reveal">AI Language Models</h3>
-    <div class="card-grid card-grid-3 reveal">
-      <a class="tool-card" href="https://chatgpt.com" target="_blank" rel="noopener">
-        <div class="tool-icon green">🟢</div>
-        <div><div class="tool-name">ChatGPT</div><div class="tool-desc">OpenAI · Versatile, widely used, strong general reasoning. GPT-4o recommended.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://claude.ai" target="_blank" rel="noopener">
-        <div class="tool-icon orange">🟠</div>
-        <div><div class="tool-name">Claude</div><div class="tool-desc">Anthropic · Exceptional for long documents, nuanced reasoning, and medical writing.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://gemini.google.com" target="_blank" rel="noopener">
-        <div class="tool-icon blue">🔵</div>
-        <div><div class="tool-name">Gemini</div><div class="tool-desc">Google · Integrates natively with NotebookLM, Docs, and Drive.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://copilot.microsoft.com" target="_blank" rel="noopener">
-        <div class="tool-icon slate">🪟</div>
-        <div><div class="tool-name">Copilot</div><div class="tool-desc">Microsoft · Native to Office 365. Best for PowerPoint, Word, and Outlook workflows.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-    </div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
 
-    <div class="divider reveal"></div>
+      <!-- LLMs -->
+      <div class="tool-group-card reveal">
+        <div class="tool-group-header" onclick="toggleGeneric(this)">
+          <span class="tool-group-label">AI Language Models</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="tool-group-body">
+            <div class="card-grid card-grid-3">
+              <a class="tool-card" href="https://chatgpt.com" target="_blank" rel="noopener">
+                <div class="tool-icon green">🟢</div>
+                <div><div class="tool-name">ChatGPT</div><div class="tool-desc">OpenAI · Versatile, widely used, strong general reasoning. GPT-4o recommended.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://claude.ai" target="_blank" rel="noopener">
+                <div class="tool-icon orange">🟠</div>
+                <div><div class="tool-name">Claude</div><div class="tool-desc">Anthropic · Exceptional for long documents, nuanced reasoning, and medical writing.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://gemini.google.com" target="_blank" rel="noopener">
+                <div class="tool-icon blue">🔵</div>
+                <div><div class="tool-name">Gemini</div><div class="tool-desc">Google · Integrates natively with NotebookLM, Docs, and Drive.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://copilot.microsoft.com" target="_blank" rel="noopener">
+                <div class="tool-icon slate">🪟</div>
+                <div><div class="tool-name">Copilot</div><div class="tool-desc">Microsoft · Native to Office 365. Best for PowerPoint, Word, and Outlook workflows.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+            </div>
+          </div></div>
+        </div>
+      </div>
 
-    <h3 style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;" class="reveal">Evidence-Based Research Tools</h3>
-    <div class="card-grid card-grid-3 reveal">
-      <a class="tool-card" href="https://www.openevidence.com" target="_blank" rel="noopener">
-        <div class="tool-icon teal">⚕️</div>
-        <div><div class="tool-name">OpenEvidence</div><div class="tool-desc">Clinical-grade AI answers grounded in peer-reviewed medical literature with citations.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://www.perplexity.ai" target="_blank" rel="noopener">
-        <div class="tool-icon purple">🔍</div>
-        <div><div class="tool-name">Perplexity</div><div class="tool-desc">AI search with real-time web citations. Useful for current guidelines and news.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://consensus.app" target="_blank" rel="noopener">
-        <div class="tool-icon blue">📊</div>
-        <div><div class="tool-name">Consensus</div><div class="tool-desc">AI-powered research synthesis. Summarizes findings across multiple studies.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" rel="noopener">
-        <div class="tool-icon slate">📚</div>
-        <div><div class="tool-name">PubMed</div><div class="tool-desc">NLM gold standard. Use alongside AI tools to verify sources and access full text.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-    </div>
+      <!-- Research -->
+      <div class="tool-group-card reveal">
+        <div class="tool-group-header" onclick="toggleGeneric(this)">
+          <span class="tool-group-label">Evidence-Based Research Tools</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="tool-group-body">
+            <div class="card-grid card-grid-3">
+              <a class="tool-card" href="https://www.openevidence.com" target="_blank" rel="noopener">
+                <div class="tool-icon teal">⚕️</div>
+                <div><div class="tool-name">OpenEvidence</div><div class="tool-desc">Clinical-grade AI answers grounded in peer-reviewed medical literature with citations.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://www.perplexity.ai" target="_blank" rel="noopener">
+                <div class="tool-icon purple">🔍</div>
+                <div><div class="tool-name">Perplexity</div><div class="tool-desc">AI search with real-time web citations. Useful for current guidelines and news.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://consensus.app" target="_blank" rel="noopener">
+                <div class="tool-icon blue">📊</div>
+                <div><div class="tool-name">Consensus</div><div class="tool-desc">AI-powered research synthesis. Summarizes findings across multiple studies.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" rel="noopener">
+                <div class="tool-icon slate">📚</div>
+                <div><div class="tool-name">PubMed</div><div class="tool-desc">NLM gold standard. Use alongside AI tools to verify sources and access full text.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+            </div>
+          </div></div>
+        </div>
+      </div>
 
-    <div class="divider reveal"></div>
+      <!-- Artifact -->
+      <div class="tool-group-card reveal">
+        <div class="tool-group-header" onclick="toggleGeneric(this)">
+          <span class="tool-group-label">Grounded Artifact Generation</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="tool-group-body">
+            <div class="card-grid card-grid-3">
+              <a class="tool-card" href="https://notebooklm.google.com" target="_blank" rel="noopener">
+                <div class="tool-icon amber">📓</div>
+                <div><div class="tool-name">NotebookLM</div><div class="tool-desc">Upload your sources → generate study guides, audio summaries, quizzes, slide outlines — all traceable to your literature.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+            </div>
+          </div></div>
+        </div>
+      </div>
 
-    <h3 style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;" class="reveal">Grounded Artifact Generation</h3>
-    <div class="card-grid card-grid-3 reveal">
-      <a class="tool-card" href="https://notebooklm.google.com" target="_blank" rel="noopener">
-        <div class="tool-icon amber">📓</div>
-        <div><div class="tool-name">NotebookLM</div><div class="tool-desc">Upload your sources → generate study guides, audio summaries, quizzes, slide outlines — all traceable to your literature.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-    </div>
+      <!-- Image/Video -->
+      <div class="tool-group-card reveal">
+        <div class="tool-group-header" onclick="toggleGeneric(this)">
+          <span class="tool-group-label">Image &amp; Video AI Tools</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body-wrap">
+          <div class="card-body-inner"><div class="tool-group-body">
+            <div class="card-grid card-grid-3">
+              <a class="tool-card" href="https://openai.com/sora" target="_blank" rel="noopener">
+                <div class="tool-icon rose">🎬</div>
+                <div><div class="tool-name">Sora</div><div class="tool-desc">OpenAI · Text-to-video generation. Potential for procedural explainer videos and patient education animations.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://openai.com/dall-e-3" target="_blank" rel="noopener">
+                <div class="tool-icon orange">🎨</div>
+                <div><div class="tool-name">DALL-E 3</div><div class="tool-desc">OpenAI · Text-to-image. Useful for educational illustrations, slide visuals, and anatomy diagrams.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://runwayml.com" target="_blank" rel="noopener">
+                <div class="tool-icon purple">🎞️</div>
+                <div><div class="tool-name">Runway ML</div><div class="tool-desc">Advanced video generation and editing. Useful for creating educational content and lecture visuals.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+              <a class="tool-card" href="https://www.midjourney.com" target="_blank" rel="noopener">
+                <div class="tool-icon teal">🖼️</div>
+                <div><div class="tool-name">Midjourney</div><div class="tool-desc">High-quality image generation. Excellent for presentation visuals and educational illustration.</div></div>
+                <span class="tool-arrow">↗</span>
+              </a>
+            </div>
+          </div></div>
+        </div>
+      </div>
 
-    <div class="divider reveal"></div>
-
-    <h3 style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;" class="reveal">Image &amp; Video AI Tools</h3>
-    <div class="card-grid card-grid-3 reveal">
-      <a class="tool-card" href="https://openai.com/sora" target="_blank" rel="noopener">
-        <div class="tool-icon rose">🎬</div>
-        <div><div class="tool-name">Sora</div><div class="tool-desc">OpenAI · Text-to-video generation. Potential for procedural explainer videos and patient education animations.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://openai.com/dall-e-3" target="_blank" rel="noopener">
-        <div class="tool-icon orange">🎨</div>
-        <div><div class="tool-name">DALL-E 3</div><div class="tool-desc">OpenAI · Text-to-image. Useful for educational illustrations, slide visuals, and anatomy diagrams.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://runwayml.com" target="_blank" rel="noopener">
-        <div class="tool-icon purple">🎞️</div>
-        <div><div class="tool-name">Runway ML</div><div class="tool-desc">Advanced video generation and editing. Useful for creating educational content and lecture visuals.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
-      <a class="tool-card" href="https://www.midjourney.com" target="_blank" rel="noopener">
-        <div class="tool-icon teal">🖼️</div>
-        <div><div class="tool-name">Midjourney</div><div class="tool-desc">High-quality image generation. Excellent for presentation visuals and educational illustration.</div></div>
-        <span class="tool-arrow">↗</span>
-      </a>
     </div>
 
   </section>
@@ -1459,39 +1689,62 @@ body {
     </div>
     <p class="section-desc reveal">Today's session is part of a larger free curriculum. The synchronous cohort is concluding, but the course remains open for asynchronous credit.</p>
 
-    <div class="course-invite-card reveal">
-      <div class="course-invite-inner">
-        <div class="course-invite-left">
-          <div class="course-invite-badge">Free · CME Credit · Digital Badge</div>
-          <div class="course-invite-title">Fundamentals of AI in Radiology with Capstone</div>
-          <div class="course-invite-desc">
-            A nine-session curriculum covering AI foundations, prompt engineering, simulation, practical workflows, image &amp; video tools, evaluation frameworks, and frontiers in research — concluding with a capstone presentation. Designed for radiologists, nuclear medicine physicians, physicists, and trainees at all levels.
-          </div>
-          <div class="course-completion">
-            <div class="course-completion-title">To earn your certificate &amp; digital badge:</div>
-            <ul class="course-completion-list">
-              <li>Complete pre- and post-course surveys</li>
-              <li>Attend or complete all sessions asynchronously</li>
-              <li>Complete the AI simulation assignment</li>
-              <li>Submit and present a capstone project</li>
-            </ul>
+    <div class="tool-group-card reveal">
+      <div class="tool-group-header" onclick="toggleGeneric(this)">
+        <div style="display:flex; align-items:center; gap:12px; flex:1;">
+          <!-- Diploma SVG icon -->
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+            <rect x="2" y="5" width="24" height="16" rx="2" fill="rgba(45,212,191,0.12)" stroke="#2dd4bf" stroke-width="1.2"/>
+            <line x1="7" y1="10" x2="21" y2="10" stroke="#2dd4bf" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+            <line x1="7" y1="13" x2="21" y2="13" stroke="#2dd4bf" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+            <line x1="7" y1="16" x2="15" y2="16" stroke="#2dd4bf" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+            <circle cx="21" cy="20" r="4" fill="rgba(45,212,191,0.15)" stroke="#2dd4bf" stroke-width="1.2"/>
+            <path d="M19 20.5 L20.5 22 L23 19.5" stroke="#2dd4bf" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18 24 L21 22.5 L24 24 L23.5 27 L21 26 L18.5 27 Z" fill="rgba(45,212,191,0.2)" stroke="#2dd4bf" stroke-width="0.8"/>
+          </svg>
+          <div>
+            <div style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text);">Fundamentals of AI in Radiology with Capstone</div>
+            <div style="font-size:11px; color:var(--teal); margin-top:2px;">Free · CME Credit · Digital Badge · Open to all</div>
           </div>
         </div>
-        <div class="course-invite-right">
-          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:16px; padding: 8px 0;">
-            <div style="font-family:var(--font); font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); text-align:center;">Register &amp; Enroll</div>
-            <div class="qr-box" style="border-color:rgba(45,212,191,0.3);">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&color=2dd4bf&bgcolor=141420&data=https://docs.google.com/forms/d/e/1FAIpQLSfLK40v3ENAkXfO0bqGBc4lu5Y5Gdcj0Jp85eOd_x0npfOhQg/viewform" alt="QR code to pre-course survey registration" style="width:140px;height:140px;" />
-              <span class="qr-label" style="color:var(--teal);">Pre-Course Survey</span>
+        <span class="card-chevron">▼</span>
+      </div>
+      <div class="card-body-wrap">
+        <div class="card-body-inner">
+          <div class="course-invite-inner" style="border-top:1px solid var(--border);">
+            <div class="course-invite-left">
+              <div class="course-invite-badge">Free · CME Credit · Digital Badge</div>
+              <div class="course-invite-title">Fundamentals of AI in Radiology with Capstone</div>
+              <div class="course-invite-desc">
+                A nine-session curriculum covering AI foundations, prompt engineering, simulation, practical workflows, image &amp; video tools, evaluation frameworks, and frontiers in research — concluding with a capstone presentation. Open to <strong>students, residents, fellows, faculty, technologists, physicists, pharmacists, and informatics professionals</strong> at all levels.
+              </div>
+              <div class="course-completion">
+                <div class="course-completion-title">To earn your certificate &amp; digital badge:</div>
+                <ul class="course-completion-list">
+                  <li>Complete pre- and post-course surveys</li>
+                  <li>Attend or complete all sessions asynchronously</li>
+                  <li>Complete the AI simulation assignment</li>
+                  <li>Submit and present a capstone project</li>
+                </ul>
+              </div>
             </div>
-            <div style="font-size:12px; color:var(--text-muted); text-align:center; line-height:1.6; max-width:180px;">
-              Scan to complete the pre-course survey and begin earning credit asynchronously.
+            <div class="course-invite-right">
+              <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:16px; padding: 8px 0;">
+                <div style="font-family:var(--font); font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); text-align:center;">Register &amp; Enroll</div>
+                <div class="qr-box" style="border-color:rgba(45,212,191,0.3);">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&color=2dd4bf&bgcolor=141420&data=https://docs.google.com/forms/d/e/1FAIpQLSfLK40v3ENAkXfO0bqGBc4lu5Y5Gdcj0Jp85eOd_x0npfOhQg/viewform" alt="QR code to pre-course survey registration" style="width:140px;height:140px;" />
+                  <span class="qr-label" style="color:var(--teal);">Pre-Course Survey</span>
+                </div>
+                <div style="font-size:12px; color:var(--text-muted); text-align:center; line-height:1.6; max-width:180px;">
+                  Scan to complete the pre-course survey and begin earning credit asynchronously.
+                </div>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfLK40v3ENAkXfO0bqGBc4lu5Y5Gdcj0Jp85eOd_x0npfOhQg/viewform" target="_blank" rel="noopener"
+                  style="display:inline-flex; align-items:center; gap:7px; font-family:var(--font); font-size:12px; font-weight:600; color:var(--teal); background:var(--teal-dim); border:1px solid rgba(45,212,191,0.25); border-radius:8px; padding:8px 18px; text-decoration:none; transition:all 0.15s;"
+                  onmouseover="this.style.background='rgba(45,212,191,0.2)'" onmouseout="this.style.background='var(--teal-dim)'">
+                  Open Survey ↗
+                </a>
+              </div>
             </div>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfLK40v3ENAkXfO0bqGBc4lu5Y5Gdcj0Jp85eOd_x0npfOhQg/viewform" target="_blank" rel="noopener"
-              style="display:inline-flex; align-items:center; gap:7px; font-family:var(--font); font-size:12px; font-weight:600; color:var(--teal); background:var(--teal-dim); border:1px solid rgba(45,212,191,0.25); border-radius:8px; padding:8px 18px; text-decoration:none; transition:all 0.15s;"
-              onmouseover="this.style.background='rgba(45,212,191,0.2)'" onmouseout="this.style.background='var(--teal-dim)'">
-              Open Survey ↗
-            </a>
           </div>
         </div>
       </div>
@@ -1501,10 +1754,15 @@ body {
   <!-- Post-CME Code -->
   <div class="section" style="padding-top:32px; padding-bottom:32px;">
     <div class="cme-banner reveal">
-      <div class="cme-banner-inner">
+      <div class="cme-banner-inner cme-header" onclick="toggleCME(this)">
         <div class="cme-label">Post-Session CME Code</div>
-        <div class="cme-code">6940</div>
-        <div class="cme-sub">Enter this code at the end of the session to claim your post-session CME credit</div>
+        <span class="cme-chevron">▼</span>
+      </div>
+      <div class="cme-body-wrap">
+        <div class="cme-body-inner">
+          <div class="cme-code">6940</div>
+          <div class="cme-sub">Enter this code at the end of the session to claim your post-session CME credit</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1530,7 +1788,7 @@ body {
         SNMMI Southwest Chapter Meeting 2026 ·
         <a href="https://www.linkedin.com/in/jpeacock/" target="_blank" rel="noopener">Lt Col Justin Peacock, MD, PhD ↗</a>
       </div>
-      <div style="font-size:11px; color:var(--text-dim);">Scan QR · Use freely · Share widely</div>
+      <div style="font-size:11px; color:#7a7988;">Scan QR · Use freely · Share widely</div>
     </div>
   </footer>
 
@@ -1668,6 +1926,21 @@ Dr. Rivera is applying for a Nuclear Medicine fellowship in Theranostics at [Ins
 
 <script>
 const prompts = { ex1: null, ex2: null, ex3: null };
+
+function toggleCard(header) {
+  const card = header.closest('.card');
+  card.classList.toggle('open');
+}
+
+function toggleCME(header) {
+  const banner = header.closest('.cme-banner');
+  banner.classList.toggle('open');
+}
+
+function toggleGeneric(header) {
+  const container = header.closest('.workshop-card, .prompt-example-card, .tool-group-card, .card');
+  if (container) container.classList.toggle('open');
+}
 
 function copyPrompt(btn, id) {
   const ta = document.getElementById(id);
