@@ -611,6 +611,138 @@ body {
   .prompt-part-key { font-size: 10px; }
 }
 
+/* ── LEARNING OBJECTIVES ── */
+.lo-card {
+  margin-top: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+}
+.lo-header { margin-bottom: 16px; }
+.lo-badge {
+  display: inline-block;
+  font-family: var(--font);
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(212,168,67,0.2);
+  border-radius: 4px; padding: 3px 9px;
+}
+.lo-list {
+  list-style: none; padding: 0;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.lo-list li {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 13.5px; color: var(--text);
+  line-height: 1.55;
+}
+.lo-num {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: 500;
+  color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(212,168,67,0.18);
+  border-radius: 4px; padding: 2px 7px;
+  flex-shrink: 0; margin-top: 1px;
+}
+
+/* ── COURSE INVITE ── */
+.course-invite-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.course-invite-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.course-invite-left {
+  padding: 28px 28px 28px 28px;
+  border-right: 1px solid var(--border);
+}
+.course-invite-right {
+  padding: 28px;
+  background: var(--bg3);
+}
+.course-invite-badge {
+  display: inline-block;
+  font-family: var(--font);
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid rgba(45,212,191,0.18);
+  border-radius: 4px; padding: 3px 9px;
+  margin-bottom: 12px;
+}
+.course-invite-title {
+  font-family: var(--font);
+  font-size: 18px; font-weight: 600;
+  color: var(--text); line-height: 1.25;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.course-invite-desc {
+  font-size: 13px; color: var(--text-muted);
+  line-height: 1.65; margin-bottom: 20px;
+}
+.course-completion-title {
+  font-family: var(--font);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px;
+}
+.course-completion-list {
+  list-style: none; padding: 0;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.course-completion-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12.5px; color: var(--text-muted);
+  line-height: 1.5;
+}
+.course-completion-list li::before {
+  content: '✓';
+  color: var(--teal); font-size: 11px;
+  flex-shrink: 0; margin-top: 1px;
+}
+.course-sessions-label {
+  font-family: var(--font);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 12px;
+}
+.course-session-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px; color: var(--text-muted);
+  line-height: 1.4;
+}
+.course-session-item:last-child { border-bottom: none; }
+.cs-num {
+  font-family: var(--font-mono);
+  font-size: 10px; color: var(--text-dim);
+  flex-shrink: 0; width: 14px; margin-top: 1px;
+}
+.cs-current {
+  display: inline-block;
+  font-size: 9.5px; font-weight: 600;
+  color: var(--gold);
+  background: var(--gold-dim);
+  border-radius: 3px; padding: 1px 5px;
+  margin-left: 4px; vertical-align: middle;
+}
+@media (max-width: 720px) {
+  .course-invite-inner { grid-template-columns: 1fr; }
+  .course-invite-left { border-right: none; border-bottom: 1px solid var(--border); }
+}
+
 /* ── SCROLL REVEAL ── */
 .reveal {
   opacity: 0; transform: translateY(16px);
@@ -731,6 +863,28 @@ body {
         All prompts can be copied directly from this page.
       </div>
     </div>
+
+    <!-- Learning Objectives -->
+    <div class="lo-card reveal">
+      <div class="lo-header">
+        <span class="lo-badge">Learning Objectives</span>
+      </div>
+      <ol class="lo-list">
+        <li>
+          <span class="lo-num">01</span>
+          <span>Evaluate effective prompt engineering techniques for Nuclear Medicine education.</span>
+        </li>
+        <li>
+          <span class="lo-num">02</span>
+          <span>Construct sophisticated prompts that integrate external resources for more accurate AI responses.</span>
+        </li>
+        <li>
+          <span class="lo-num">03</span>
+          <span>Design task-specific, custom AI tools for more accurate and reliable educational products.</span>
+        </li>
+      </ol>
+    </div>
+
   </section>
 
   <!-- ── SECTION 1: WHY THIS MATTERS ── -->
@@ -1218,6 +1372,53 @@ body {
       </div>
     </div>
 
+  </section>
+
+  <!-- ── COURSE INVITE ── -->
+  <section class="section" id="course" style="background: linear-gradient(135deg, rgba(212,168,67,0.05) 0%, transparent 60%);">
+    <div class="section-header reveal">
+      <span class="section-num" style="background:rgba(45,212,191,0.12); color:var(--teal); border-color:rgba(45,212,191,0.2);">↗</span>
+      <h2 class="section-title">Continue Learning — Join the Course</h2>
+    </div>
+    <p class="section-desc reveal">Today's session is part of a larger free curriculum. The synchronous cohort is concluding, but the course remains open for asynchronous credit.</p>
+
+    <div class="course-invite-card reveal">
+      <div class="course-invite-inner">
+        <div class="course-invite-left">
+          <div class="course-invite-badge">Free · CME Credit · Digital Badge</div>
+          <div class="course-invite-title">Fundamentals of AI in Radiology with Capstone</div>
+          <div class="course-invite-desc">
+            A nine-session curriculum covering AI foundations, prompt engineering, simulation, practical workflows, image &amp; video tools, evaluation frameworks, and frontiers in research — concluding with a capstone presentation. Designed for radiologists, nuclear medicine physicians, physicists, and trainees at all levels.
+          </div>
+          <div class="course-completion">
+            <div class="course-completion-title">To earn your certificate &amp; digital badge:</div>
+            <ul class="course-completion-list">
+              <li>Complete pre- and post-course surveys</li>
+              <li>Attend or complete all sessions asynchronously</li>
+              <li>Complete the AI simulation assignment</li>
+              <li>Submit and present a capstone project</li>
+            </ul>
+          </div>
+        </div>
+        <div class="course-invite-right">
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:16px; padding: 8px 0;">
+            <div style="font-family:var(--font); font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); text-align:center;">Register &amp; Enroll</div>
+            <div class="qr-box" style="border-color:rgba(45,212,191,0.3);">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&color=2dd4bf&bgcolor=141420&data=https://docs.google.com/forms/d/e/1FAIpQLSfLK40v3ENAkXfO0bqGBc4lu5Y5Gdcj0Jp85eOd_x0npfOhQg/viewform" alt="QR code to pre-course survey registration" style="width:140px;height:140px;" />
+              <span class="qr-label" style="color:var(--teal);">Pre-Course Survey</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); text-align:center; line-height:1.6; max-width:180px;">
+              Scan to complete the pre-course survey and begin earning credit asynchronously.
+            </div>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfLK40v3ENAkXfO0bqGBc4lu5Y5Gdcj0Jp85eOd_x0npfOhQg/viewform" target="_blank" rel="noopener"
+              style="display:inline-flex; align-items:center; gap:7px; font-family:var(--font); font-size:12px; font-weight:600; color:var(--teal); background:var(--teal-dim); border:1px solid rgba(45,212,191,0.25); border-radius:8px; padding:8px 18px; text-decoration:none; transition:all 0.15s;"
+              onmouseover="this.style.background='rgba(45,212,191,0.2)'" onmouseout="this.style.background='var(--teal-dim)'">
+              Open Survey ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ── FOOTER ── -->
