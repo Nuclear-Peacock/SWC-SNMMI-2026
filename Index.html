@@ -642,29 +642,29 @@ body {
 
   <div class="sb-nav">
     <div class="sb-section-label">Session</div>
-    <a class="sb-link active" onclick="scrollTo('hero')">
+    <a class="sb-link" href="#hero" onclick="navTo(event,'hero')">
       <span class="sb-icon">◈</span> Overview
     </a>
 
     <div class="sb-section-label">Sections</div>
-    <a class="sb-link" onclick="scrollTo('s1')">
+    <a class="sb-link" href="#s1" onclick="navTo(event,'s1')">
       <span class="sb-icon">◉</span> Why This Matters
     </a>
-    <a class="sb-link" onclick="scrollTo('s2')">
+    <a class="sb-link" href="#s2" onclick="navTo(event,'s2')">
       <span class="sb-icon">◉</span> Anatomy of a Prompt
     </a>
-    <a class="sb-link" onclick="scrollTo('s3')">
+    <a class="sb-link" href="#s3" onclick="navTo(event,'s3')">
       <span class="sb-icon">◉</span> Prompt Techniques
     </a>
-    <a class="sb-link" onclick="scrollTo('s4')">
+    <a class="sb-link" href="#s4" onclick="navTo(event,'s4')">
       <span class="sb-icon">◉</span> Workshop: Do &amp; Discuss
     </a>
-    <a class="sb-link" onclick="scrollTo('s5')">
+    <a class="sb-link" href="#s5" onclick="navTo(event,'s5')">
       <span class="sb-icon">◉</span> AI Tool Ecosystem
     </a>
 
     <div class="sb-section-label">More</div>
-    <a class="sb-link" onclick="scrollTo('footer')">
+    <a class="sb-link" href="#footer" onclick="navTo(event,'footer')">
       <span class="sb-icon">○</span> Disclaimers
     </a>
   </div>
@@ -723,7 +723,7 @@ body {
 
     <div class="hero-qr-wrap">
       <div class="qr-box">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&color=d4a843&bgcolor=0a0a14&data=https://pavoninespectra.netlify.app/" alt="QR code linking to this webapp" />
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&color=d4a843&bgcolor=0a0a14&data=https://swc-snmmi.netlify.app/" alt="QR code linking to this webapp" />
         <span class="qr-label">This WebApp</span>
       </div>
       <div class="hero-timing">
@@ -1409,9 +1409,13 @@ function copyPrompt(btn, id) {
   });
 }
 
-function scrollTo(id) {
+function navTo(e, id) {
+  if (e) e.preventDefault();
   const el = document.getElementById(id);
-  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.pushState(null, '', '#' + id);
+  }
   if (window.innerWidth <= 900) closeSidebar();
 }
 
@@ -1424,26 +1428,35 @@ function closeSidebar() {
   document.getElementById('sidebar-overlay').classList.remove('open');
 }
 
-// Active nav
+// Active nav highlight via IntersectionObserver
 const sections = ['hero','s1','s2','s3','s4','s5','footer'];
 const links = document.querySelectorAll('.sb-link');
-const sectionMap = { hero:0, s1:1, s2:2, s3:3, s4:4, s5:5, footer:6 };
+
+function setActiveLink(id) {
+  links.forEach(l => {
+    const href = l.getAttribute('href');
+    l.classList.toggle('active', href === '#' + id);
+  });
+}
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const id = entry.target.id;
-      const idx = sectionMap[id];
-      if (idx !== undefined) {
-        links.forEach((l,i) => l.classList.toggle('active', i === idx));
-      }
-    }
+    if (entry.isIntersecting) setActiveLink(entry.target.id);
   });
 }, { threshold: 0.25 });
 
 sections.forEach(id => {
   const el = document.getElementById(id);
   if (el) observer.observe(el);
+});
+
+// Scroll to hash on page load
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.replace('#','');
+  if (hash) {
+    const el = document.getElementById(hash);
+    if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
 });
 
 // Scroll reveal
