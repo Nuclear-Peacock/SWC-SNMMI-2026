@@ -299,12 +299,14 @@ body {
 
 /* ── CARD GRID ── */
 .card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .card-grid-3 {
+  display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
 }
 
 /* ── CARD ── */
@@ -1138,7 +1140,7 @@ body {
         </div>
       </div>
 
-      <div class="card" style="border-style:dashed; background:transparent; grid-column: 1 / -1;">
+      <div class="card" style="border-style:dashed; background:transparent;">
         <div class="card-header" onclick="toggleCard(this)">
           <div class="card-header-left">
             <div class="card-tag gold" style="margin-bottom:6px;">Note</div>
@@ -1205,7 +1207,7 @@ body {
         </div>
       </div>
 
-      <div class="card" style="grid-column: span 2;">
+      <div class="card">
         <div class="card-header" onclick="toggleCard(this)">
           <div class="card-header-left">
             <div class="card-tag" style="margin-bottom:6px;">Framework</div>
@@ -1496,6 +1498,7 @@ body {
             </div>
             <div class="workshop-footer">
               <button class="btn-copy" onclick="copyPrompt(this, 'ex3')"><span>⎘</span> Copy Prompt</button>
+              <a class="btn-ai" href="https://link.springer.com/article/10.1007/s00259-023-06255-8" target="_blank" rel="noopener" style="color:var(--teal);background:var(--teal-dim);border-color:rgba(45,212,191,0.25);">📄 Sample Guideline</a>
               <a class="btn-ai" href="https://notebooklm.google.com" target="_blank" rel="noopener">📓 NotebookLM</a>
               <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
             </div>
