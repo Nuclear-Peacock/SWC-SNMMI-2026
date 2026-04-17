@@ -743,6 +743,42 @@ body {
   .course-invite-left { border-right: none; border-bottom: 1px solid var(--border); }
 }
 
+/* ── CME CODE BANNER ── */
+.cme-banner {
+  margin-top: 24px;
+}
+.cme-banner-inner {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1.5px solid rgba(212,168,67,0.35);
+  border-radius: var(--radius);
+  padding: 20px 28px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.cme-banner-inner::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(212,168,67,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cme-label {
+  font-family: var(--font);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold);
+}
+.cme-code {
+  font-family: var(--font-mono);
+  font-size: 42px; font-weight: 500;
+  color: var(--text); letter-spacing: 0.12em;
+  line-height: 1;
+}
+.cme-sub {
+  font-size: 12px; color: var(--text-muted);
+}
+
 /* ── SCROLL REVEAL ── */
 .reveal {
   opacity: 0; transform: translateY(16px);
@@ -1000,6 +1036,16 @@ body {
       </div>
 
     </div>
+
+    <!-- Pre-CME Code -->
+    <div class="cme-banner reveal">
+      <div class="cme-banner-inner">
+        <div class="cme-label">Pre-Session CME Code</div>
+        <div class="cme-code">6109</div>
+        <div class="cme-sub">Enter this code now to claim your pre-session CME credit</div>
+      </div>
+    </div>
+
   </section>
 
   <!-- ── SECTION 2: ANATOMY OF A PROMPT ── -->
@@ -1451,6 +1497,17 @@ body {
       </div>
     </div>
   </section>
+
+  <!-- Post-CME Code -->
+  <div class="section" style="padding-top:32px; padding-bottom:32px;">
+    <div class="cme-banner reveal">
+      <div class="cme-banner-inner">
+        <div class="cme-label">Post-Session CME Code</div>
+        <div class="cme-code">6940</div>
+        <div class="cme-sub">Enter this code at the end of the session to claim your post-session CME credit</div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── FOOTER ── -->
   <footer id="footer">
