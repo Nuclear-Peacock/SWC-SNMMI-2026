@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastering Prompt Engineering for Nuclear Medicine — SNMMI SW 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08080e;
+  --bg2: #0f0f18;
+  --bg3: #141420;
+  --surface: #1a1a28;
+  --surface2: #21212f;
+  --border: rgba(255,255,255,0.07);
+  --border-gold: rgba(212,168,67,0.28);
+  --gold: #d4a843;
+  --gold-light: #e8c36b;
+  --gold-dim: rgba(212,168,67,0.13);
+  --gold-glow: rgba(212,168,67,0.06);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45,212,191,0.1);
+  --text: #eeecea;
+  --text-muted: #a8a6b8;
+  --text-dim: #4e4d5c;
+  --radius: 16px;
+  --radius-sm: 9px;
+  --sidebar-w: 252px;
+  --font: 'Sora', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  position: fixed; top: 0; left: 0;
+  width: var(--sidebar-w); height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  overflow-y: auto; z-index: 200;
+  display: flex; flex-direction: column;
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+}
+#sidebar::-webkit-scrollbar { width: 3px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.sb-header {
+  padding: 22px 18px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.sb-badge {
+  display: inline-block;
+  font-family: var(--font);
+  font-size: 8.5px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(212,168,67,0.18);
+  border-radius: 4px; padding: 3px 8px;
+  margin-bottom: 10px;
+}
+.sb-title {
+  font-family: var(--font);
+  font-size: 12.5px; font-weight: 600;
+  color: var(--text); line-height: 1.4;
+}
+.sb-presenter {
+  font-size: 11px; color: var(--text-muted);
+  margin-top: 4px;
+}
+.sb-presenter a {
+  color: var(--gold); text-decoration: none;
+}
+.sb-presenter a:hover { color: var(--gold-light); }
+
+.sb-nav { padding: 14px 0; flex: 1; }
+.sb-section-label {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--text-dim);
+  padding: 10px 18px 4px;
+}
+.sb-link {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 18px;
+  font-size: 12.5px; color: var(--text-muted);
+  text-decoration: none; cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  border-left: 2px solid transparent;
+}
+.sb-link:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.sb-link.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-glow); }
+.sb-link .sb-icon { font-size: 13px; flex-shrink: 0; }
+.sb-link .sb-num {
+  margin-left: auto;
+  font-size: 10px; color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+.sb-tools {
+  padding: 14px 18px 20px;
+  border-top: 1px solid var(--border);
+}
+.sb-tools-title {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.sb-tool-link {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 0;
+  font-size: 11.5px; color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.sb-tool-link:hover { color: var(--gold); }
+.sb-tool-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold-dim);
+  border: 1px solid rgba(212,168,67,0.3);
+  flex-shrink: 0;
+}
+
+/* ── HAMBURGER ── */
+#menu-btn {
+  display: none;
+  position: fixed; top: 14px; left: 14px; z-index: 300;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; width: 38px; height: 38px;
+  cursor: pointer; align-items: center; justify-content: center;
+  flex-direction: column; gap: 5px; padding: 10px;
+}
+#menu-btn span {
+  display: block; width: 100%; height: 1.5px;
+  background: var(--text-muted); border-radius: 2px;
+  transition: all 0.25s;
+}
+#sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 150;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(2px);
+}
+
+/* ── MAIN ── */
+#main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+}
+
+/* ── HERO ── */
+#hero {
+  position: relative;
+  padding: 72px 56px 60px;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+#hero::before {
+  content: '';
+  position: absolute; top: -80px; right: -80px;
+  width: 520px; height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,168,67,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+#hero::after {
+  content: '';
+  position: absolute; bottom: -100px; left: 10%;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-meta {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 22px;
+}
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font);
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(212,168,67,0.2);
+  border-radius: 5px; padding: 4px 10px;
+}
+.hero-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-dim); }
+
+.hero-title {
+  font-family: var(--font);
+  font-size: clamp(26px, 3.2vw, 40px);
+  font-weight: 600; line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  max-width: 680px;
+  margin-bottom: 10px;
+}
+.hero-title .gold { color: var(--gold); }
+
+.hero-sub {
+  font-size: 15px; color: var(--text-muted);
+  max-width: 520px; margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.hero-presenter {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 32px;
+}
+.presenter-avatar {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: linear-gradient(135deg, #2a2018 0%, #3d2e10 100%);
+  border: 1.5px solid rgba(212,168,67,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font); font-size: 13px; font-weight: 600;
+  color: var(--gold); flex-shrink: 0;
+}
+.presenter-info { line-height: 1.35; }
+.presenter-name {
+  font-family: var(--font);
+  font-size: 14px; font-weight: 600; color: var(--text);
+}
+.presenter-role {
+  font-size: 12px; color: var(--text-muted);
+  margin-top: 2px;
+}
+.presenter-role a {
+  color: var(--gold); text-decoration: none;
+  font-weight: 500;
+}
+.presenter-role a:hover { color: var(--gold-light); }
+
+.hero-qr-wrap {
+  display: flex; align-items: center; gap: 14px;
+}
+.qr-box {
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.qr-box img { display: block; width: 100px; height: 100px; border-radius: 4px; }
+.qr-label {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold);
+}
+.hero-timing {
+  font-size: 12px; color: var(--text-muted); line-height: 1.5;
+}
+.hero-timing strong { color: var(--text); font-weight: 500; }
+
+/* ── SECTION ── */
+.section {
+  padding: 56px 56px 48px;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: 24px;
+}
+.section:last-child { border-bottom: none; }
+
+.section-header {
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 10px;
+}
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(212,168,67,0.18);
+  border-radius: 5px; padding: 3px 8px;
+  margin-top: 3px; flex-shrink: 0;
+}
+.section-title {
+  font-family: var(--font);
+  font-size: 22px; font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.section-desc {
+  font-size: 13.5px; color: var(--text-muted);
+  margin-bottom: 28px;
+  padding-left: 38px;
+}
+
+/* ── CARD GRID ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.card-grid-3 {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  position: relative; overflow: hidden;
+}
+.card:hover {
+  border-color: rgba(212,168,67,0.22);
+  transform: translateY(-2px);
+  background: var(--surface2);
+}
+.card-icon {
+  font-size: 22px; margin-bottom: 12px; display: block;
+}
+.card-title {
+  font-family: var(--font);
+  font-size: 14px; font-weight: 600;
+  color: var(--text); margin-bottom: 7px;
+  line-height: 1.3;
+}
+.card-body {
+  font-size: 13px; color: var(--text-muted);
+  line-height: 1.65;
+}
+.card-body ul {
+  list-style: none; padding: 0;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.card-body ul li::before {
+  content: '—';
+  color: var(--gold); margin-right: 7px;
+  font-size: 11px;
+}
+.card-tag {
+  display: inline-block;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid rgba(45,212,191,0.15);
+  border-radius: 4px; padding: 2px 7px;
+  margin-bottom: 10px;
+}
+.card-tag.gold {
+  color: var(--gold); background: var(--gold-dim);
+  border-color: rgba(212,168,67,0.18);
+}
+
+/* ── PROMPT ANATOMY CARD ── */
+.anatomy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-top: 6px;
+}
+.anatomy-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.anatomy-item-key {
+  font-family: var(--font);
+  font-size: 11px; font-weight: 600;
+  color: var(--gold); letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 3px;
+}
+.anatomy-item-val {
+  font-size: 12px; color: var(--text-muted); line-height: 1.5;
+}
+
+/* ── EXAMPLE PROMPT CARD ── */
+.prompt-example-card {
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 16px;
+}
+.prompt-example-title {
+  font-family: var(--font);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px;
+}
+.prompt-parts {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.prompt-part {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.prompt-part-key {
+  font-family: var(--font-mono);
+  font-size: 10.5px; font-weight: 500;
+  color: var(--gold); align-self: start;
+  padding-top: 1px;
+}
+.prompt-part-val {
+  font-size: 12.5px; color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* ── WORKSHOP CARDS ── */
+.workshop-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.workshop-card:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-2px);
+}
+.workshop-header {
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.workshop-num {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(212,168,67,0.2);
+  border-radius: 5px; padding: 3px 8px;
+  flex-shrink: 0; margin-top: 2px;
+}
+.workshop-title {
+  font-family: var(--font);
+  font-size: 15px; font-weight: 600; color: var(--text);
+  line-height: 1.3;
+}
+.workshop-desc {
+  font-size: 13px; color: var(--text-muted);
+  line-height: 1.65;
+}
+.workshop-meta {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.wm-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--text-muted);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px; padding: 3px 10px;
+}
+.wm-pill .dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--gold);
+}
+.workshop-footer {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.btn-copy {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font);
+  font-size: 12px; font-weight: 600;
+  color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(212,168,67,0.25);
+  border-radius: 8px; padding: 7px 16px;
+  cursor: pointer; transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-copy:hover { background: rgba(212,168,67,0.2); border-color: rgba(212,168,67,0.45); }
+.btn-copy.copied { color: var(--teal); background: var(--teal-dim); border-color: rgba(45,212,191,0.25); }
+.btn-ai {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; color: var(--text-muted);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 12px;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-ai:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+/* ── TOOL CARDS ── */
+.tool-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex; align-items: flex-start; gap: 13px;
+  text-decoration: none; color: inherit;
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+}
+.tool-card:hover {
+  border-color: rgba(212,168,67,0.22);
+  transform: translateY(-2px);
+  background: var(--surface2);
+}
+.tool-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.tool-icon.purple { background: rgba(139,92,246,0.15); }
+.tool-icon.green  { background: rgba(52,211,153,0.15); }
+.tool-icon.blue   { background: rgba(59,130,246,0.15); }
+.tool-icon.orange { background: rgba(251,146,60,0.15); }
+.tool-icon.teal   { background: rgba(45,212,191,0.15); }
+.tool-icon.rose   { background: rgba(251,113,133,0.15); }
+.tool-icon.amber  { background: var(--gold-dim); }
+.tool-icon.slate  { background: rgba(148,163,184,0.1); }
+.tool-name {
+  font-family: var(--font);
+  font-size: 13.5px; font-weight: 600; color: var(--text);
+  margin-bottom: 3px;
+}
+.tool-desc {
+  font-size: 12px; color: var(--text-muted); line-height: 1.5;
+}
+.tool-arrow {
+  margin-left: auto; font-size: 13px; color: var(--text-dim);
+  align-self: center; flex-shrink: 0;
+}
+
+/* ── HYPE CYCLE VISUAL ── */
+.hype-visual {
+  margin-top: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px 10px;
+}
+.hype-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 0;
+  font-size: 12.5px; color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+.hype-row:last-child { border-bottom: none; }
+.hype-indicator {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.hype-row strong { color: var(--text); font-weight: 500; }
+
+/* ── FOOTER ── */
+#footer {
+  padding: 40px 56px 48px;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+}
+.footer-disclaimers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px; margin-bottom: 28px;
+}
+.disclaimer-block {
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.disclaimer-title {
+  font-family: var(--font);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 7px;
+}
+.disclaimer-text {
+  font-size: 11.5px; color: var(--text-muted); line-height: 1.65;
+}
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-credit {
+  font-size: 12px; color: var(--text-dim);
+}
+.footer-credit a { color: var(--gold); text-decoration: none; }
+.footer-credit a:hover { color: var(--gold-light); }
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px; background: var(--border);
+  margin: 24px 0;
+}
+
+
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  #sidebar { transform: translateX(-252px); width: 252px; }
+  #sidebar.open { transform: translateX(0); }
+  #sidebar-overlay.open { display: block; }
+  #menu-btn { display: flex; }
+  #main { margin-left: 0; }
+  #hero, .section, #footer { padding-left: 22px; padding-right: 22px; }
+  #hero { padding-top: 66px; }
+  .anatomy-grid { grid-template-columns: 1fr; }
+  .prompt-part { grid-template-columns: 1fr; gap: 4px; }
+  .prompt-part-key { font-size: 10px; }
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Sidebar overlay -->
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- Hamburger -->
+<button id="menu-btn" onclick="toggleSidebar()" aria-label="Open menu">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- ── SIDEBAR ── -->
+<nav id="sidebar">
+  <div class="sb-header">
+    <div class="sb-badge">SNMMI SW Chapter 2026</div>
+    <div class="sb-title">Mastering Prompt Engineering for Nuclear Medicine</div>
+    <div class="sb-presenter">
+      Lt Col Justin Peacock, MD, PhD ·
+      <a href="https://www.linkedin.com/in/justinpeacock" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="sb-nav">
+    <div class="sb-section-label">Session</div>
+    <a class="sb-link active" onclick="scrollTo('hero')">
+      <span class="sb-icon">◈</span> Overview
+    </a>
+
+    <div class="sb-section-label">Sections</div>
+    <a class="sb-link" onclick="scrollTo('s1')">
+      <span class="sb-icon">◉</span> Why This Matters
+    </a>
+    <a class="sb-link" onclick="scrollTo('s2')">
+      <span class="sb-icon">◉</span> Anatomy of a Prompt
+    </a>
+    <a class="sb-link" onclick="scrollTo('s3')">
+      <span class="sb-icon">◉</span> Prompt Techniques
+    </a>
+    <a class="sb-link" onclick="scrollTo('s4')">
+      <span class="sb-icon">◉</span> Workshop: Do &amp; Discuss
+    </a>
+    <a class="sb-link" onclick="scrollTo('s5')">
+      <span class="sb-icon">◉</span> AI Tool Ecosystem
+    </a>
+
+    <div class="sb-section-label">More</div>
+    <a class="sb-link" onclick="scrollTo('footer')">
+      <span class="sb-icon">○</span> Disclaimers
+    </a>
+  </div>
+
+  <div class="sb-tools">
+    <div class="sb-tools-title">Quick Links</div>
+    <a class="sb-tool-link" href="https://chatgpt.com" target="_blank" rel="noopener">
+      <span class="sb-tool-dot"></span> ChatGPT
+    </a>
+    <a class="sb-tool-link" href="https://claude.ai" target="_blank" rel="noopener">
+      <span class="sb-tool-dot"></span> Claude
+    </a>
+    <a class="sb-tool-link" href="https://gemini.google.com" target="_blank" rel="noopener">
+      <span class="sb-tool-dot"></span> Gemini
+    </a>
+    <a class="sb-tool-link" href="https://notebooklm.google.com" target="_blank" rel="noopener">
+      <span class="sb-tool-dot"></span> NotebookLM
+    </a>
+    <a class="sb-tool-link" href="https://www.openevidence.com" target="_blank" rel="noopener">
+      <span class="sb-tool-dot"></span> OpenEvidence
+    </a>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main id="main">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-meta">
+      <span class="hero-badge">SNMMI Southwest Chapter Meeting 2026</span>
+      <span class="hero-dot"></span>
+      <span style="font-size:12px; color: var(--text-dim);">Workshop Session</span>
+    </div>
+
+    <h1 class="hero-title">
+      Mastering Accurate &amp; Effective<br>
+      <span class="gold">Prompt Engineering</span><br>
+      for Nuclear Medicine
+    </h1>
+    <p class="hero-sub">
+      A hands-on workshop for nuclear medicine trainees and professionals on using generative AI tools responsibly and effectively across clinical, educational, research, and administrative workflows.
+    </p>
+
+    <div class="hero-presenter">
+      <div class="presenter-avatar">JP</div>
+      <div class="presenter-info">
+        <div class="presenter-name">Lt Col Justin Peacock, MD, PhD</div>
+        <div class="presenter-role">
+          Associate Dean for Research · Assistant Professor of Radiology &amp; Bioengineering<br>
+          Uniformed Services University School of Medicine ·
+          <a href="https://www.linkedin.com/in/justinpeacock" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-qr-wrap">
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&color=d4a843&bgcolor=0a0a14&data=https://pavoninespectra.netlify.app/" alt="QR code linking to this webapp" />
+        <span class="qr-label">This WebApp</span>
+      </div>
+      <div class="hero-timing">
+        Scan QR code to follow along on your device.<br>
+        All prompts can be copied directly from this page.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 1: WHY THIS MATTERS ── -->
+  <section class="section" id="s1">
+    <div class="section-header reveal">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Why This Matters</h2>
+    </div>
+    <p class="section-desc reveal">AI is already reshaping nuclear medicine for physicians, physicists, and technologists alike. Understanding where we are on the curve — and where the hype ends — is the foundation of effective use.</p>
+
+
+    <div class="card-grid reveal">
+
+      <div class="card">
+        <div class="card-tag">Context</div>
+        <div class="card-title">The Gartner Hype Cycle</div>
+        <div class="card-body">
+          <svg viewBox="0 0 320 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-top:8px;display:block;">
+            <!-- axes -->
+            <line x1="32" y1="8" x2="32" y2="148" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <line x1="32" y1="148" x2="312" y2="148" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+            <!-- hype curve -->
+            <path d="M32,146 C54,146 66,128 82,58 C90,24 98,12 106,12 C114,12 120,24 128,70 C136,114 144,134 162,136 C180,138 192,122 214,112 C236,102 254,94 312,82"
+              fill="none" stroke="#d4a843" stroke-width="2" stroke-linecap="round"/>
+            <!-- Peak label at apex — bg then text -->
+            <rect x="76" y="1" width="60" height="17" rx="2" fill="#1a1a28"/>
+            <text x="106" y="9" fill="rgba(212,168,67,0.95)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle" font-weight="600">Peak of Inflated</text>
+            <text x="106" y="17" fill="rgba(212,168,67,0.95)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle" font-weight="600">Expectations</text>
+            <!-- X-axis phase labels — bg rects then text -->
+            <rect x="4" y="152" width="56" height="17" rx="2" fill="#1a1a28"/>
+            <text x="32" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Innovation</text>
+            <text x="32" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Trigger</text>
+
+            <rect x="134" y="152" width="56" height="17" rx="2" fill="#1a1a28"/>
+            <text x="162" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Trough of</text>
+            <text x="162" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Disillusionment</text>
+
+            <rect x="186" y="152" width="60" height="17" rx="2" fill="#1a1a28"/>
+            <text x="216" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Slope of</text>
+            <text x="216" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Enlightenment</text>
+
+            <rect x="268" y="152" width="48" height="17" rx="2" fill="#1a1a28"/>
+            <text x="292" y="160" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Plateau of</text>
+            <text x="292" y="168" fill="rgba(138,137,152,0.85)" font-size="7.5" font-family="DM Sans,sans-serif" text-anchor="middle">Productivity</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🔬</span>
+        <div class="card-tag">Applications</div>
+        <div class="card-title">Four Domains of AI Use in Nuclear Medicine</div>
+        <div class="card-body">
+          <ul>
+            <li><strong>Clinical</strong> — SPECT/PET reconstruction, lesion detection, dosimetry support, report drafting</li>
+            <li><strong>Educational</strong> — Board prep for physicians &amp; physicists, technologist training, patient handouts, quiz creation</li>
+            <li><strong>Research</strong> — Literature synthesis, protocol design, physics modeling, grant writing</li>
+            <li><strong>Administrative</strong> — Prior auth letters, QC documentation, scheduling optimization, policy drafts</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">⚠️</span>
+        <div class="card-tag gold">Ethics</div>
+        <div class="card-title">The Challenge of Accuracy</div>
+        <div class="card-body">
+          <p>AI models <em>hallucinate</em> — they generate confident, plausible, but factually incorrect content. In nuclear medicine, this has real stakes.</p>
+          <div class="divider"></div>
+          <ul>
+            <li>Always verify AI output against primary sources</li>
+            <li>Bias in training data can skew clinical recommendations</li>
+            <li>AI-generated reports require radiologist sign-off</li>
+            <li>Patient data must never be entered into public LLMs</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECTION 2: ANATOMY OF A PROMPT ── -->
+  <section class="section" id="s2">
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Anatomy of a Prompt</h2>
+    </div>
+    <p class="section-desc reveal">Prompt engineering is the art and science of crafting precise instructions for AI models to generate desired responses. The better your prompt, the better your output.</p>
+
+
+    <div class="card-grid reveal">
+      <div class="card">
+        <div class="card-tag">Definition</div>
+        <div class="card-title">Everyday Analogies</div>
+        <div class="card-body">
+          <p>You already know how to prompt — you just don't call it that:</p>
+          <ul style="margin-top:8px;">
+            <li>A well-formed PubMed query</li>
+            <li>A PICOT research question</li>
+            <li>A structured patient history to a consultant</li>
+            <li>Precise search terms in a PACS system</li>
+          </ul>
+          <p style="margin-top:10px;">Prompt engineering applies the same precision to generative AI.</p>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column: span 2;">
+        <div class="card-tag">Framework</div>
+        <div class="card-title">The 6 Elements of an Effective Prompt</div>
+        <div class="anatomy-grid">
+          <div class="anatomy-item">
+            <div class="anatomy-item-key">Role</div>
+            <div class="anatomy-item-val">Who should the AI act as? (e.g., "You are a board-certified nuclear medicine physician...")</div>
+          </div>
+          <div class="anatomy-item">
+            <div class="anatomy-item-key">Task</div>
+            <div class="anatomy-item-val">What specific action should it perform? Clear verbs matter. (create, summarize, compare, draft)</div>
+          </div>
+          <div class="anatomy-item">
+            <div class="anatomy-item-key">Context</div>
+            <div class="anatomy-item-val">What background does the AI need? (patient scenario, audience, setting)</div>
+          </div>
+          <div class="anatomy-item">
+            <div class="anatomy-item-key">Example</div>
+            <div class="anatomy-item-val">Optional but powerful — provide a sample of what you want.</div>
+          </div>
+          <div class="anatomy-item">
+            <div class="anatomy-item-key">Format</div>
+            <div class="anatomy-item-val">How should the output be structured? (bullet list, table, paragraph, SOAP note)</div>
+          </div>
+          <div class="anatomy-item">
+            <div class="anatomy-item-key">Tone</div>
+            <div class="anatomy-item-val">What register? (formal/technical for colleagues, plain language for patients)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-example-card reveal">
+      <div class="prompt-example-title">Worked Example — Nuclear Medicine Context</div>
+      <div class="prompt-parts">
+        <div class="prompt-part">
+          <div class="prompt-part-key">Role</div>
+          <div class="prompt-part-val">You are an experienced nuclear medicine physician and educator.</div>
+        </div>
+        <div class="prompt-part">
+          <div class="prompt-part-key">Task</div>
+          <div class="prompt-part-val">Create a concise patient education handout about a whole-body bone scan.</div>
+        </div>
+        <div class="prompt-part">
+          <div class="prompt-part-key">Context</div>
+          <div class="prompt-part-val">The patient is a 62-year-old with a new diagnosis of prostate cancer. They are anxious and have no prior imaging experience.</div>
+        </div>
+        <div class="prompt-part">
+          <div class="prompt-part-key">Format</div>
+          <div class="prompt-part-val">Use plain language. Include: what to expect, radiation safety reassurance, preparation instructions, and what happens after.</div>
+        </div>
+        <div class="prompt-part">
+          <div class="prompt-part-key">Tone</div>
+          <div class="prompt-part-val">Calm, reassuring, and clear. Avoid jargon. Use a 6th-grade reading level.</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SECTION 3: PROMPT TECHNIQUES ── -->
+  <section class="section" id="s3">
+    <div class="section-header reveal">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Prompt Techniques</h2>
+    </div>
+    <p class="section-desc reveal">Five techniques that dramatically improve AI output quality — applicable whether you are interpreting scans, writing protocols, or building training materials.</p>
+
+    <div class="card-grid reveal">
+
+      <div class="card">
+        <span class="card-icon">✍️</span>
+        <div class="card-tag">Technique 1</div>
+        <div class="card-title">Free Text Prompting</div>
+        <div class="card-body">
+          <p>The foundation — available in every AI platform. Apply the 6-element anatomy and iterate.</p>
+          <ul style="margin-top:10px;">
+            <li>Refine your prompt based on each output</li>
+            <li>Start a new chat if context becomes polluted</li>
+            <li>Rate responses and give explicit feedback</li>
+            <li>Use "forget history" where supported</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🎭</span>
+        <div class="card-tag">Technique 2</div>
+        <div class="card-title">Role-Playing Prompts</div>
+        <div class="card-body">
+          <p>Assign the AI a specific expert persona to improve accuracy and calibrate tone for your audience.</p>
+          <div style="background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; margin-top:10px; font-size:12.5px; color:var(--text-muted); font-style:italic;">
+            "You are a nuclear medicine physicist reviewing a center's SPECT/CT quality control protocol. Identify gaps relative to SNMMI guidelines..."
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🔗</span>
+        <div class="card-tag">Technique 3</div>
+        <div class="card-title">Chain-of-Thought Prompting</div>
+        <div class="card-body">
+          <p>Force the AI to reason step-by-step before reaching a conclusion. Critical for complex clinical and physics scenarios.</p>
+          <ul style="margin-top:10px;">
+            <li>Ask AI to "explain your reasoning step-by-step"</li>
+            <li>Define each reasoning step explicitly</li>
+            <li>Best for differential diagnosis and dosimetry checks</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+            <rect x="3" y="6" width="14" height="11" rx="1.5" fill="rgba(212,168,67,0.18)" stroke="#d4a843" stroke-width="1.2"/>
+            <rect x="5" y="4" width="14" height="11" rx="1.5" fill="rgba(212,168,67,0.12)" stroke="#d4a843" stroke-width="1.2"/>
+            <rect x="7" y="2" width="14" height="11" rx="1.5" fill="rgba(212,168,67,0.22)" stroke="#d4a843" stroke-width="1.2"/>
+            <line x1="10" y1="6" x2="18" y2="6" stroke="#d4a843" stroke-width="0.8" stroke-linecap="round" opacity="0.6"/>
+            <line x1="10" y1="8.5" x2="18" y2="8.5" stroke="#d4a843" stroke-width="0.8" stroke-linecap="round" opacity="0.6"/>
+            <line x1="10" y1="11" x2="15" y2="11" stroke="#d4a843" stroke-width="0.8" stroke-linecap="round" opacity="0.6"/>
+          </svg>
+        </span>
+        <div class="card-tag">Technique 4</div>
+        <div class="card-title">Retrieval-Augmented Generation (RAG)</div>
+        <div class="card-body">
+          <p>Ground AI output in <em>your</em> documents — not just its training data. Upload a source and prompt against it.</p>
+          <ul style="margin-top:10px;">
+            <li>Upload SNMMI guidelines, review articles, or protocols</li>
+            <li>Generate study guides, summaries, or Q&amp;A grounded in the source</li>
+            <li>Every claim is traceable back to your uploaded document</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-icon">🛠️</span>
+        <div class="card-tag">Technique 5</div>
+        <div class="card-title">Custom AI Tools (GPTs &amp; Gems)</div>
+        <div class="card-body">
+          <p>Build or use pre-configured AI assistants trained on specific instructions — no prompting from scratch each time.</p>
+          <ul style="margin-top:10px;">
+            <li>Custom GPTs (ChatGPT) and Gems (Gemini) save reusable system prompts</li>
+            <li>Build a "Board Review Q&amp;A Bot" or "Report Drafting Assistant"</li>
+            <li>Share within your department for consistent outputs</li>
+            <li>No coding required — configure via natural language</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECTION 4: WORKSHOP ── -->
+  <section class="section" id="s4">
+    <div class="section-header reveal">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Workshop: Do &amp; Discuss</h2>
+    </div>
+    <p class="section-desc reveal">
+      Four hands-on exercises. Copy the prompt, paste it into your AI platform of choice, and compare results with your neighbors.
+      Use the AI links to open a platform directly.
+    </p>
+
+
+    <div style="display:flex; flex-direction:column; gap:16px;">
+
+      <!-- Exercise 1 -->
+      <div class="workshop-card reveal">
+        <div class="workshop-header">
+          <span class="workshop-num">Ex 01</span>
+          <div>
+            <div class="workshop-title">Patient Education Resource — Pediatric <sup>99m</sup>Tc MAG3 Renal Scan</div>
+          </div>
+        </div>
+        <div class="workshop-desc">
+          Practice <strong>role-playing + free text prompting</strong> to create a parent-friendly handout for a child undergoing a Tc-99m MAG3 renal scan with furosemide. Focus on what the scan measures, the Lasix injection, radiation safety reassurance, and what to expect on the day.
+        </div>
+        <div class="workshop-meta">
+          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Prompt Type:</span> Role-Playing + Free Text</span>
+          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Domain:</span> Educational</span>
+        </div>
+        <div class="workshop-footer">
+          <button class="btn-copy" onclick="copyPrompt(this, 'ex1')">
+            <span>⎘</span> Copy Prompt
+          </button>
+          <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
+          <a class="btn-ai" href="https://claude.ai" target="_blank" rel="noopener">🟠 Claude</a>
+          <a class="btn-ai" href="https://gemini.google.com" target="_blank" rel="noopener">🔵 Gemini</a>
+        </div>
+      </div>
+
+      <!-- Exercise 2 -->
+      <div class="workshop-card reveal">
+        <div class="workshop-header">
+          <span class="workshop-num">Ex 02</span>
+          <div>
+            <div class="workshop-title">Chain-of-Thought: PET/CT Differential Diagnosis</div>
+          </div>
+        </div>
+        <div class="workshop-desc">
+          A 58-year-old male with unexplained weight loss and night sweats. FDG PET/CT shows multiple hypermetabolic mediastinal and hilar nodes (SUVmax 14.2), with no distant organ involvement. Practice <strong>chain-of-thought prompting</strong> to force the AI to reason systematically to a diagnosis — without jumping to conclusions.
+        </div>
+        <div class="workshop-meta">
+          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Prompt Type:</span> Chain-of-Thought</span>
+          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Domain:</span> Clinical</span>
+        </div>
+        <div class="workshop-footer">
+          <button class="btn-copy" onclick="copyPrompt(this, 'ex2')">
+            <span>⎘</span> Copy Prompt
+          </button>
+          <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
+          <a class="btn-ai" href="https://claude.ai" target="_blank" rel="noopener">🟠 Claude</a>
+          <a class="btn-ai" href="https://gemini.google.com" target="_blank" rel="noopener">🔵 Gemini</a>
+        </div>
+      </div>
+
+      <!-- Exercise 3 -->
+      <div class="workshop-card reveal">
+        <div class="workshop-header">
+          <span class="workshop-num">Ex 03</span>
+          <div>
+            <div class="workshop-title">RAG: Build a Board Review Study Guide</div>
+          </div>
+        </div>
+        <div class="workshop-desc">
+          Use <strong>Retrieval-Augmented Generation (RAG)</strong> with NotebookLM. Upload a nuclear medicine review article or SNMMI guideline PDF, then use the prompt below to generate a structured study guide grounded in that source — not from the AI's general training.
+        </div>
+        <div class="workshop-meta">
+          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Prompt Type:</span> RAG</span>
+          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Domain:</span> Educational</span>
+        </div>
+        <div class="workshop-footer">
+          <button class="btn-copy" onclick="copyPrompt(this, 'ex3')">
+            <span>⎘</span> Copy Prompt
+          </button>
+          <a class="btn-ai" href="https://notebooklm.google.com" target="_blank" rel="noopener">📓 NotebookLM</a>
+          <a class="btn-ai" href="https://chatgpt.com" target="_blank" rel="noopener">🟢 ChatGPT</a>
+        </div>
+      </div>
+
+      <!-- Exercise 4 -->
+      <div class="workshop-card reveal">
+        <div class="workshop-header">
+          <span class="workshop-num">Ex 04</span>
+          <div>
+            <div class="workshop-title">Custom AI Tool: Letter of Recommendation Writer</div>
+          </div>
+        </div>
+        <div class="workshop-desc">
+          Build a <strong>custom GPT or Gem</strong> that drafts tailored letters of recommendation for nuclear medicine trainees and staff. The tool accepts a position description, the applicant's role, and a synthetic CV — then generates a polished, specific letter. Use the prompt below as the system instruction when configuring your custom tool.
+        </div>
+        <div class="workshop-meta">
+          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Prompt Type:</span> Custom AI Tool</span>
+          <span class="wm-pill"><span class="dot"></span> <span style="color:var(--text-dim);margin-right:3px;">Domain:</span> Administrative</span>
+        </div>
+        <div style="background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 16px; font-size:12.5px; color:var(--text-muted); line-height:1.65; margin-bottom:2px;">
+          <div style="font-family:var(--font); font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">How to set it up</div>
+          <ol style="list-style:decimal; padding-left:16px; display:flex; flex-direction:column; gap:5px;">
+            <li>Open ChatGPT → <em>Explore GPTs</em> → <em>Create</em>, or Gemini → <em>Gems</em> → <em>New Gem</em></li>
+            <li>Paste the system prompt below into the instructions field</li>
+            <li>Save and name it <em>"NM Recommendation Writer"</em></li>
+            <li>When using: paste in (1) the position title &amp; description, (2) the applicant's role/training level, and (3) a CV or resume — use the sample CV below to try it now</li>
+            <li>The tool outputs a full draft letter — review, edit, and sign</li>
+          </ol>
+        </div>
+        <div class="workshop-footer">
+          <button class="btn-copy" onclick="copyPrompt(this, 'ex4')">
+            <span>⎘</span> Copy System Prompt
+          </button>
+          <button class="btn-copy" onclick="copyPrompt(this, 'ex4cv')" style="background:var(--teal-dim); color:var(--teal); border-color:rgba(45,212,191,0.25);">
+            <span>⎘</span> Copy Sample CV
+          </button>
+          <a class="btn-ai" href="https://chatgpt.com/gpts/editor" target="_blank" rel="noopener">🟢 Build in ChatGPT</a>
+          <a class="btn-ai" href="https://gemini.google.com/gems/create" target="_blank" rel="noopener">🔵 Build in Gemini</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECTION 5: AI TOOLS ── -->
+  <section class="section" id="s5">
+    <div class="section-header reveal">
+      <span class="section-num">05</span>
+      <h2 class="section-title">AI Tool Ecosystem</h2>
+    </div>
+    <p class="section-desc reveal">The tools available today span language models, evidence-based research, artifact generation, and image/video synthesis. A curated starting point for nuclear medicine practice.</p>
+
+
+    <h3 style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;" class="reveal">AI Language Models</h3>
+    <div class="card-grid card-grid-3 reveal">
+      <a class="tool-card" href="https://chatgpt.com" target="_blank" rel="noopener">
+        <div class="tool-icon green">🟢</div>
+        <div><div class="tool-name">ChatGPT</div><div class="tool-desc">OpenAI · Versatile, widely used, strong general reasoning. GPT-4o recommended.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://claude.ai" target="_blank" rel="noopener">
+        <div class="tool-icon orange">🟠</div>
+        <div><div class="tool-name">Claude</div><div class="tool-desc">Anthropic · Exceptional for long documents, nuanced reasoning, and medical writing.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://gemini.google.com" target="_blank" rel="noopener">
+        <div class="tool-icon blue">🔵</div>
+        <div><div class="tool-name">Gemini</div><div class="tool-desc">Google · Integrates natively with NotebookLM, Docs, and Drive.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://copilot.microsoft.com" target="_blank" rel="noopener">
+        <div class="tool-icon slate">🪟</div>
+        <div><div class="tool-name">Copilot</div><div class="tool-desc">Microsoft · Native to Office 365. Best for PowerPoint, Word, and Outlook workflows.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+    </div>
+
+    <div class="divider reveal"></div>
+
+    <h3 style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;" class="reveal">Evidence-Based Research Tools</h3>
+    <div class="card-grid card-grid-3 reveal">
+      <a class="tool-card" href="https://www.openevidence.com" target="_blank" rel="noopener">
+        <div class="tool-icon teal">⚕️</div>
+        <div><div class="tool-name">OpenEvidence</div><div class="tool-desc">Clinical-grade AI answers grounded in peer-reviewed medical literature with citations.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://www.perplexity.ai" target="_blank" rel="noopener">
+        <div class="tool-icon purple">🔍</div>
+        <div><div class="tool-name">Perplexity</div><div class="tool-desc">AI search with real-time web citations. Useful for current guidelines and news.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://consensus.app" target="_blank" rel="noopener">
+        <div class="tool-icon blue">📊</div>
+        <div><div class="tool-name">Consensus</div><div class="tool-desc">AI-powered research synthesis. Summarizes findings across multiple studies.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" rel="noopener">
+        <div class="tool-icon slate">📚</div>
+        <div><div class="tool-name">PubMed</div><div class="tool-desc">NLM gold standard. Use alongside AI tools to verify sources and access full text.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+    </div>
+
+    <div class="divider reveal"></div>
+
+    <h3 style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;" class="reveal">Grounded Artifact Generation</h3>
+    <div class="card-grid card-grid-3 reveal">
+      <a class="tool-card" href="https://notebooklm.google.com" target="_blank" rel="noopener">
+        <div class="tool-icon amber">📓</div>
+        <div><div class="tool-name">NotebookLM</div><div class="tool-desc">Upload your sources → generate study guides, audio summaries, quizzes, slide outlines — all traceable to your literature.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+    </div>
+
+    <div class="divider reveal"></div>
+
+    <h3 style="font-family:var(--font); font-size:13px; font-weight:600; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;" class="reveal">Image &amp; Video AI Tools</h3>
+    <div class="card-grid card-grid-3 reveal">
+      <a class="tool-card" href="https://openai.com/sora" target="_blank" rel="noopener">
+        <div class="tool-icon rose">🎬</div>
+        <div><div class="tool-name">Sora</div><div class="tool-desc">OpenAI · Text-to-video generation. Potential for procedural explainer videos and patient education animations.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://openai.com/dall-e-3" target="_blank" rel="noopener">
+        <div class="tool-icon orange">🎨</div>
+        <div><div class="tool-name">DALL-E 3</div><div class="tool-desc">OpenAI · Text-to-image. Useful for educational illustrations, slide visuals, and anatomy diagrams.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://runwayml.com" target="_blank" rel="noopener">
+        <div class="tool-icon purple">🎞️</div>
+        <div><div class="tool-name">Runway ML</div><div class="tool-desc">Advanced video generation and editing. Useful for creating educational content and lecture visuals.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-card" href="https://www.midjourney.com" target="_blank" rel="noopener">
+        <div class="tool-icon teal">🖼️</div>
+        <div><div class="tool-name">Midjourney</div><div class="tool-desc">High-quality image generation. Excellent for presentation visuals and educational illustration.</div></div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <div class="card" style="border-style:dashed; background:transparent;">
+        <div class="card-tag gold">Note</div>
+        <div class="card-title" style="font-size:13px;">Important Caution — All AI Tools</div>
+        <div class="card-body" style="font-size:12px; color:#b8b6c8;">No patient data — including images, reports, identifiers, or any protected health information — should be uploaded to or entered into any AI tool without explicit permission and in accordance with your institutional policies, BAA agreements, and applicable HIPAA regulations. This applies to all AI platforms listed here, not only image and video tools.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer id="footer">
+    <div class="footer-disclaimers">
+      <div class="disclaimer-block">
+        <div class="disclaimer-title">Opinions &amp; Assertions</div>
+        <div class="disclaimer-text">The opinions and assertions expressed herein are those of the author and do not necessarily reflect the official policy or position of the Uniformed Services University of the Health Sciences, the Department of the Army, Navy, or the Air Force, or the Department of War.</div>
+      </div>
+      <div class="disclaimer-block">
+        <div class="disclaimer-title">AI Tool Descriptions</div>
+        <div class="disclaimer-text">Descriptions of AI tools and applications do not imply endorsement. All tools should be evaluated by the user for appropriateness in their clinical, educational, or research context prior to use.</div>
+      </div>
+      <div class="disclaimer-block">
+        <div class="disclaimer-title">Conflicts of Interest</div>
+        <div class="disclaimer-text">The author has no conflicts of interest to report.</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-credit">
+        SNMMI Southwest Chapter Meeting 2026 ·
+        <a href="https://www.linkedin.com/in/justinpeacock" target="_blank" rel="noopener">Lt Col Justin Peacock, MD, PhD ↗</a>
+      </div>
+      <div style="font-size:11px; color:var(--text-dim);">Scan QR · Use freely · Share widely</div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- Hidden prompt text -->
+<textarea id="ex1" style="display:none;">You are an experienced nuclear medicine physician and pediatric patient educator.
+
+Create a parent-friendly education handout for a child (ages 4–12) who is about to undergo a Tc-99m MAG3 renal scan with furosemide (Lasix).
+
+The child's parent is anxious about radiation exposure and has no prior nuclear medicine experience. They are also worried about the furosemide injection.
+
+Structure the handout as follows:
+1. What is a MAG3 renal scan? (2–3 sentences, plain language — explain it checks how the kidneys drain)
+2. Why does my child need this? (1–2 sentences)
+3. What is the radiotracer and is it safe? (reassure about radiation — compare the dose to everyday background exposures)
+4. What is the Lasix (furosemide) injection and why is it given? (explain it helps the kidneys drain so the doctor can see if there is a blockage — reassure it is safe and commonly used)
+5. How should we prepare? (hydration instructions, bladder emptying before scan, bring a favorite toy or comfort item)
+6. What will happen on the day of the scan? (step-by-step, child-friendly tone — IV placement, lying still, camera above them, total time ~60 min)
+7. Will it hurt?
+8. When will we get results?
+9. Questions to ask your doctor
+
+Use a calm, reassuring tone. Write at a 6th-grade reading level. Avoid medical jargon where possible. Use short paragraphs and simple headers. Note that the child should be well hydrated before and after the scan.</textarea>
+
+<textarea id="ex2" style="display:none;">You are a nuclear medicine physician and expert in FDG PET/CT interpretation. The current AI model being tested tends to jump immediately to a diagnosis without explaining its evidence, leading to errors in complex cases.
+
+Your mission: write a chain-of-thought prompt that forces the AI to reason step-by-step through the following case BEFORE offering a final differential diagnosis.
+
+CASE:
+Patient: 58-year-old male. Unexplained 15-lb weight loss over 3 months, drenching night sweats, no fever.
+FDG PET/CT Findings: Multiple hypermetabolic mediastinal and bilateral hilar lymph nodes (SUVmax 14.2). No focal uptake in lungs, liver, spleen, or bone marrow. No pleural effusion.
+
+Your prompt must:
+1. Define 4–5 specific reasoning steps the AI must output before stating a diagnosis.
+2. Each step must specify what logical check or analysis occurs — not just "Step 1, Step 2."
+   Example step: "Step 2: Evaluate the distribution pattern of nodal involvement — is it unilateral, bilateral, contiguous, or skip?"
+3. Require the AI to cite what findings support AND argue against each major diagnosis considered.
+4. End with a structured differential of 3 diagnoses ranked by likelihood, with supporting rationale.
+
+Write the full chain-of-thought prompt now.</textarea>
+
+<textarea id="ex3" style="display:none;">You are an expert nuclear medicine educator and board review specialist. Using ONLY the sources uploaded to this notebook, generate a comprehensive board review study guide on the topic covered in the document.
+
+Structure your output as follows:
+
+SECTION 1 — KEY CONCEPTS (10–15 bullet points)
+- The most high-yield facts from the source
+- Focus on items likely to appear on nuclear medicine board examinations
+
+SECTION 2 — CLINICAL PEARLS (5–8 items)
+- Practical take-home points that distinguish expert-level understanding
+- Include any "traps" or common pitfalls mentioned in the source
+
+SECTION 3 — REVIEW QUESTIONS (5 questions)
+- Write 5 multiple-choice questions (A–E format) based strictly on the uploaded source
+- Include the correct answer and a 2–3 sentence explanation for each
+
+SECTION 4 — GAPS IN THE LITERATURE
+- Note any areas the source identifies as needing further research
+- Flag any recommendations that are based on limited evidence
+
+Ground every item in the uploaded source. If a section cannot be completed from the source alone, note: "Not addressed in uploaded source — verify externally."</textarea>
+
+<textarea id="ex4" style="display:none;">You are an expert letter of recommendation writer for nuclear medicine professionals. Your job is to draft polished, specific, and compelling letters of recommendation.
+
+When the user provides the following three inputs, generate a complete letter of recommendation draft:
+
+INPUT 1 — POSITION BEING SOUGHT
+The title, program, institution (if known), and a brief description of what the role involves.
+
+INPUT 2 — APPLICANT'S BACKGROUND
+The applicant's current title, training level (e.g., NM resident, fellow, technologist, physicist), years of experience, and any notable clinical or research focus areas.
+
+INPUT 3 — CV SUMMARY
+A synthetic or de-identified summary of the applicant's key accomplishments: publications, presentations, awards, clinical rotations, technical skills, leadership roles, and any special projects.
+
+---
+
+LETTER FORMAT:
+- Open with your relationship to the applicant and how long you have known them
+- Paragraph 1: Clinical or technical competence — cite 2–3 specific examples from the CV
+- Paragraph 2: Research or educational contributions — cite specific work
+- Paragraph 3: Character, professionalism, and teamwork — give a brief illustrative anecdote or attribute
+- Closing paragraph: Unequivocal endorsement, your contact information offer
+- Sign off as "Sincerely, [Your Name], [Your Title]" with placeholders
+
+TONE: Formal, enthusiastic, specific. Avoid generic praise. Every sentence should connect to a concrete example from the inputs.
+LENGTH: 4–5 paragraphs, approximately 400–500 words.
+
+Wait for the user to provide all three inputs before drafting. If any input is missing, ask for it before proceeding.</textarea>
+
+<textarea id="ex4cv" style="display:none;">SAMPLE CV SUMMARY — FOR PRACTICE USE ONLY (synthetic, not a real person)
+
+NAME: Dr. Alex M. Rivera, MD
+CURRENT ROLE: Second-year Nuclear Medicine Resident
+INSTITUTION: University Medical Center (fictional)
+TRAINING LEVEL: PGY-5, completing ACGME-accredited Nuclear Medicine residency
+
+EDUCATION
+- MD, State University School of Medicine (2021)
+- BS, Biomedical Engineering, State University (2017) — Summa Cum Laude
+
+CLINICAL TRAINING
+- Rotating resident in Nuclear Medicine (24 months): broad exposure to PET/CT oncology, SPECT/CT (bone, cardiac, renal), thyroid imaging and therapy, and theranostics (Lu-177 PSMA, Lu-177 DOTATATE)
+- Internal Medicine internship (12 months): strong foundation in general medicine and patient communication
+- Completed 200+ supervised FDG PET/CT interpretations; recognized by attendings for systematic reporting and clinical correlation
+
+RESEARCH & SCHOLARSHIP
+- Co-author: "AI-Assisted Lesion Detection in Whole-Body FDG PET/CT: A Pilot Study" — submitted to Journal of Nuclear Medicine, under review
+- Poster presentation: SNMMI Annual Meeting 2025 — "Optimizing MAG3 Renal Scan Protocols in Pediatric Patients"
+- Research elective: 3-month rotation in nuclear medicine physics, focusing on SPECT reconstruction and image quality optimization
+
+EDUCATION & TEACHING
+- Developed a nuclear medicine board review question bank used by co-residents (80+ questions)
+- Presented 6 resident teaching conferences on PET/CT artifacts and theranostics dosimetry
+- Mentored two medical students during nuclear medicine sub-internship rotations
+
+TECHNICAL SKILLS
+- Proficient in PACS, PET/CT and SPECT/CT post-processing platforms
+- Familiar with AI-assisted reporting tools and radiation dosimetry software
+- Basic programming skills (Python) applied to imaging data analysis
+
+LEADERSHIP & SERVICE
+- Resident representative, Nuclear Medicine Program Quality Improvement Committee
+- Organized department journal club (monthly) for 18 months
+- Volunteered at community health fair providing radiation safety education to the public
+
+AWARDS & RECOGNITION
+- Resident Teaching Award, Department of Nuclear Medicine, 2024
+- Dean's Research Fellowship, medical school (2020)
+
+PERSONAL STATEMENT HIGHLIGHT
+Dr. Rivera is applying for a Nuclear Medicine fellowship in Theranostics at [Institution Name]. They have demonstrated a consistent commitment to advancing nuclear medicine through clinical excellence, scholarship, and education. Their work on AI-assisted PET/CT and pediatric renal protocols aligns directly with the fellowship's research mission.</textarea>
+
+<script>
+const prompts = { ex1: null, ex2: null, ex3: null };
+
+function copyPrompt(btn, id) {
+  const ta = document.getElementById(id);
+  if (!ta) return;
+  const text = ta.value.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<span>✓</span> Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = orig;
+    }, 2000);
+  }).catch(() => {
+    const ta2 = document.createElement('textarea');
+    ta2.value = text;
+    ta2.style.position = 'fixed'; ta2.style.opacity = '0';
+    document.body.appendChild(ta2);
+    ta2.select(); document.execCommand('copy');
+    document.body.removeChild(ta2);
+    btn.classList.add('copied');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<span>✓</span> Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = orig;
+    }, 2000);
+  });
+}
+
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  if (window.innerWidth <= 900) closeSidebar();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+// Active nav
+const sections = ['hero','s1','s2','s3','s4','s5','footer'];
+const links = document.querySelectorAll('.sb-link');
+const sectionMap = { hero:0, s1:1, s2:2, s3:3, s4:4, s5:5, footer:6 };
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      const idx = sectionMap[id];
+      if (idx !== undefined) {
+        links.forEach((l,i) => l.classList.toggle('active', i === idx));
+      }
+    }
+  });
+}, { threshold: 0.25 });
+
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) observer.observe(el);
+});
+
+// Scroll reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
